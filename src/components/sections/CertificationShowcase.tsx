@@ -6,13 +6,27 @@ import { certifications } from "@/lib/data";
 // approval and CE certification files are supplied and swapped in.
 export function CertificationShowcase() {
   return (
-    <section className="bg-ivory px-6 py-20 lg:px-10 lg:py-28">
+    <section className="bg-ivory px-6 pb-20 lg:px-10 lg:pb-28">
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-        <p className="text-sm font-bold tracking-wide text-plum">אישורים רגולטוריים</p>
-        <h2 className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl">
+        <p
+          className="text-sm font-bold tracking-wide text-plum"
+          data-edit-id="src/components/sections/CertificationShowcase.tsx#eyebrow"
+        >
+          {/* @edit:eyebrow */}
+          אישורים רגולטוריים
+        </p>
+        <h2
+          className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
+          data-edit-id="src/components/sections/CertificationShowcase.tsx#headline"
+        >
+          {/* @edit:headline */}
           עומדים בתווי התקן המחמירים ביותר
         </h2>
-        <p className="max-w-xl text-base leading-relaxed text-stone lg:text-lg">
+        <p
+          className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
+          data-edit-id="src/components/sections/CertificationShowcase.tsx#body"
+        >
+          {/* @edit:body */}
           מוצרי Reyoungel® מחזיקים באישור משרד הבריאות הישראלי ובתו התקן
           האירופי CE, לצד עמידה בתקן הבינלאומי לניהול איכות במכשור רפואי
           ISO 13485 — שלושה אישורים המעידים על בקרת איכות קפדנית לאורך כל
@@ -25,7 +39,7 @@ export function CertificationShowcase() {
           {certifications.map((cert) => (
             <div
               key={cert.id}
-              className="flex flex-col items-center gap-5 border-b border-hairline px-6 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-e sm:border-hairline sm:last:border-e-0"
+              className="feature-card-hover flex flex-col items-center gap-5 border-b border-hairline px-6 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-e sm:border-hairline sm:last:border-e-0"
             >
               <div className="relative flex h-28 w-28 items-center justify-center rounded-full border-2 border-dashed border-wine/30 bg-wine/[0.03]">
                 <FileCheck2 className="h-8 w-8 text-wine/50" strokeWidth={1.5} aria-hidden />
@@ -34,10 +48,17 @@ export function CertificationShowcase() {
                 </span>
               </div>
               <div>
-                <p dir="ltr" className="font-display text-lg font-black text-ink">
+                <p
+                  dir="ltr"
+                  className="font-display text-lg font-black text-ink"
+                  data-edit-id={`src/lib/data.ts#certifications-${cert.id}-label`}
+                >
                   {cert.label}
                 </p>
-                <p className="mt-1 max-w-[14rem] text-sm leading-relaxed text-stone">
+                <p
+                  className="mt-1 max-w-[14rem] text-sm leading-relaxed text-stone"
+                  data-edit-id={`src/lib/data.ts#certifications-${cert.id}-description`}
+                >
                   {cert.description}
                 </p>
               </div>

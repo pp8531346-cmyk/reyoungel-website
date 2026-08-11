@@ -2,7 +2,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { HeroHighlights } from "@/components/sections/HeroHighlights";
-import { BrandPromise } from "@/components/sections/BrandPromise";
 import { ProductRange } from "@/components/sections/ProductRange";
 import { TechnologyTeaser } from "@/components/sections/TechnologyTeaser";
 import { TrustAndStats } from "@/components/sections/TrustAndStats";
@@ -24,7 +23,6 @@ export default function Home() {
       <main>
         <Hero />
         <HeroHighlights />
-        <BrandPromise />
         <ProductRange />
         <TechnologyTeaser />
         <TrustAndStats />
