@@ -6,7 +6,7 @@ import { certifications, stats } from "@/lib/data";
 
 export function TrustAndStats() {
   return (
-    <section className="bg-ivory px-6 py-20 lg:px-10 lg:py-28">
+    <section className="tinted-wine-soft px-6 py-20 lg:px-10 lg:py-28">
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 text-center sm:grid-cols-3">
         {stats.map((stat, i) => (
           <Reveal key={stat.label} delay={i * 100}>

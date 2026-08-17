@@ -8,13 +8,6 @@ export function CertificationShowcase() {
   return (
     <section className="bg-ivory px-6 pb-20 lg:px-10 lg:pb-28">
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-        <p
-          className="text-sm font-bold tracking-wide text-plum"
-          data-edit-id="src/components/sections/CertificationShowcase.tsx#eyebrow"
-        >
-          {/* @edit:eyebrow */}
-          אישורים רגולטוריים
-        </p>
         <h2
           className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
           data-edit-id="src/components/sections/CertificationShowcase.tsx#headline"

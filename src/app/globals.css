@@ -128,6 +128,15 @@ body {
   );
 }
 
+/* Soft wine-tinted section background — a tonal step between wine's two
+ * existing uses (full solid-fill blocks, or tiny text/icon accents). Used
+ * sparingly (About's family-story section, Home's TrustAndStats) so it reads
+ * as a deliberate, quiet shift in warmth rather than a repeated formula of
+ * its own. Same color-mix technique as .hero-gradient-bg, not a new hex. */
+.tinted-wine-soft {
+  background: color-mix(in srgb, var(--color-wine) 4%, var(--color-ivory));
+}
+
 .grain {
   pointer-events: none;
 }

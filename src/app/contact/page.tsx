@@ -29,8 +29,13 @@ export default function ContactPage() {
 
             <Reveal delay={150} className="flex flex-col justify-center gap-6">
               <div>
-                <p className="text-sm font-bold tracking-wide text-plum">יצירת קשר ישירה</p>
-                <h2 className="mt-3 max-w-sm font-display text-2xl font-black text-ink lg:text-3xl">
+                {/* Design-audit fixes #1 and #5: dropped the eyebrow (PageHero
+                    above already establishes "צור קשר" as the page context)
+                    and normalized this h2 up to the site's default h2 scale
+                    — it had no viewport-height constraint like ProductRange's,
+                    so the smaller size here was an unexplained inconsistency
+                    rather than a deliberate exception. */}
+                <h2 className="max-w-sm font-display text-3xl font-black text-ink lg:text-4xl">
                   לרופאים, קליניקות ומרכזי רפואה אסתטית
                 </h2>
                 <p className="mt-4 max-w-sm text-sm leading-relaxed text-stone lg:text-base">

@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { Frank_Ruhl_Libre, Assistant } from "next/font/google";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { DevEditorGate } from "@/dev-editor/DevEditorGate";
 import "./globals.css";
 
 const frankRuhlLibre = Frank_Ruhl_Libre({
   variable: "--font-frank-ruhl",
   subsets: ["hebrew", "latin"],
-  weight: "900",
+  // 900 remains the default for every headline/numeral (unchanged brand rule).
+  // 400 is loaded for exactly one spot: the Technology page's mid-page quote
+  // banner, which gets a deliberately quieter editorial weight instead of
+  // repeating the black-weight default (see globals.css + technology/page.tsx).
+  weight: ["400", "900"],
 });
 
 const assistant = Assistant({
@@ -41,6 +46,7 @@ export default function RootLayout({
       className={`${frankRuhlLibre.variable} ${assistant.variable}`}
     >
       <body className="min-h-screen bg-ivory text-ink antialiased">
+        <SmoothScroll />
         <ScrollProgress />
         <DevEditorGate>{children}</DevEditorGate>
       </body>

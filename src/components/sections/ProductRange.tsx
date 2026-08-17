@@ -1,81 +1,143 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
-import { DepthGauge } from "@/components/ui/DepthGauge";
-import { FaceZone } from "@/components/decor/FaceZone";
-import { accentColor } from "@/lib/utils";
+import { BeforeAfterCompare } from "@/components/sections/BeforeAfterCompare";
 import { products } from "@/lib/data";
+import { heroBoxes } from "@/lib/productShowcaseContent";
+
+/** Single merged description per product for this compact card layout — combines
+ * each product's `tagline` (indication) and `areas` (treatment areas) from
+ * src/lib/data.ts into one natural sentence, since the card no longer has room
+ * for two separate description lines. This is Home-page-only copy: /products
+ * (ProductJourney) still reads `tagline`/`areas` as separate fields from
+ * src/lib/data.ts directly and is unaffected. */
+const cardDescriptions: Record<(typeof products)[number]["code"], string> = {
+  R001: /* @edit:cardDescriptions-R001 */ "לקמטי ההבעה העדינים ביותר באזור שקעי העיניים והברקודים",
+  R002: /* @edit:cardDescriptions-R002 */ "לשפתיים ולקמטים בעומק בינוני, ולחידוד קו מתאר השפה.",
+  R003: /* @edit:cardDescriptions-R003 */ "לנפח שפתיים ולחיים, ולטיפול בקפל האף–שפה ובקמטי המריונטה.",
+  R004: /* @edit:cardDescriptions-R004 */ "לעיצוב עצמות הלחי, הסנטר, קו הלסת והנפח העמוק.",
+  R005: /* @edit:cardDescriptions-R005 */ "לעיצוב מתאר הפנים והגוף — קו הלסת, הסנטר, עצמות הלחיים והאף.",
+};
+
+// Matched before/after pair — same head position/angle/zoom/framing on both,
+// cropped from the source studio photos (724x1030) to remove the baked-in
+// "A / PRE-TREATMENT" and "B / POST-HYALURONIC ACID TREATMENT" caption strip,
+// which would otherwise duplicate/clash with this component's own labels.
+const BEFORE_AFTER_PAIR = {
+  before: "/images/treatment-compare-before.png",
+  after: "/images/treatment-compare-after.png",
+};
 
 export function ProductRange() {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-28 lg:px-10">
-      <Reveal className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section className="flex flex-col gap-6 bg-ivory px-6 py-16 lg:h-screen lg:justify-center lg:gap-4 lg:overflow-hidden lg:px-10 lg:pb-[3vh] lg:pt-[max(5.5rem,3vh)]">
+      <Reveal className="flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold tracking-wide text-plum">מגוון המוצרים</p>
-          <h2 className="mt-3 max-w-xl font-display text-3xl font-black text-ink lg:text-4xl">
-            חמישה מוצרים, לכל שלב ואזור טיפול
-          </h2>
-          <p className="mt-2 text-sm font-bold text-stone">
-            פיסול פנים · מילוי שפתיים · פיסול אף · פיסול קו לסת
+          <p
+            className="text-sm font-bold tracking-wide text-plum"
+            data-edit-id="src/components/sections/ProductRange.tsx#eyebrow"
+          >
+            {/* @edit:eyebrow */}
+            מגוון המוצרים
           </p>
+          {/* Design-audit fix #5: this h2 intentionally sits one step below the
+              site's default h2 scale (text-3xl/text-4xl elsewhere). This
+              section is height-constrained (lg:h-screen, the "fits in one
+              viewport" pattern) — bumping the size was tested and risks
+              overflowing that budget, so the deviation is deliberate and
+              documented here rather than silently normalized. */}
+          <h2
+            className="mt-2 max-w-xl font-display text-2xl font-black text-ink lg:text-3xl"
+            data-edit-id="src/components/sections/ProductRange.tsx#headline"
+          >
+            {/* @edit:headline */}
+            לכל אזורי הטיפול
+          </h2>
         </div>
         <Button href="/products" variant="outline" className="shrink-0">
           לכל המוצרים
         </Button>
       </Reveal>
 
-      <div className="mt-14 flex flex-col gap-5">
-        {products.map((product, i) => {
-          const accent = accentColor(product.packagingColor);
-          return (
-            <Reveal key={product.code} delay={i * 70}>
-              <Link
-                href="/products"
-                className="group relative flex flex-col gap-6 overflow-hidden rounded-[1.75rem] border border-hairline bg-cream/60 p-6 transition-all duration-300 hover:border-wine/25 hover:shadow-[0_18px_40px_-20px_rgba(26,20,20,0.25)] sm:flex-row sm:items-center sm:gap-8 lg:p-8"
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-y-0 start-0 w-1"
-                  style={{ backgroundColor: accent }}
-                />
+      {/* Two halves, split at the site's lg breakpoint (same one every other
+          responsive stack on the site uses). Before/after comes first in DOM,
+          which satisfies both layouts at once: on mobile (plain flex-col) it
+          renders on top per spec; on desktop (flex-row, RTL) the first DOM
+          child renders rightmost — so it lands in the right half, cards in
+          the left half, exactly as required. No `order-*` override needed. */}
+      <div className="flex min-h-0 flex-col gap-6 lg:flex-1 lg:flex-row lg:items-stretch lg:gap-10">
+        <div className="flex aspect-[4/5] min-h-0 shrink-0 lg:aspect-auto lg:w-1/2 lg:flex-1">
+          <BeforeAfterCompare
+            beforeSrc={BEFORE_AFTER_PAIR.before}
+            afterSrc={BEFORE_AFTER_PAIR.after}
+            className="w-full"
+          />
+        </div>
 
-                <div className="flex shrink-0 items-center gap-5 sm:gap-6">
-                  <span className="font-display text-2xl font-black text-stone/50 lg:text-3xl">
+        <div className="flex min-h-0 flex-col justify-center gap-2 lg:w-1/2 lg:flex-1">
+          {products.map((product, i) => {
+            const box = heroBoxes.find((b) => b.code === product.code);
+            return (
+              <Reveal key={product.code} delay={i * 60}>
+                <Link
+                  href="/products"
+                  className="hover-lift-card group relative flex items-center gap-3 overflow-hidden rounded-xl border border-hairline bg-cream/60 py-2 pe-3 ps-0"
+                >
+                  {/* 1. Color bar — rightmost element, exact box color (no CSS mute) */}
+                  <span
+                    aria-hidden
+                    className="h-10 w-1 shrink-0 self-stretch rounded-full"
+                    style={{ backgroundColor: product.packagingColor }}
+                  />
+
+                  {/* 2. Number */}
+                  <span className="rail-number shrink-0 font-display text-lg font-black text-stone/50">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div className="h-16 w-14 shrink-0 text-ink/70 lg:h-20 lg:w-16">
-                    <FaceZone depth={product.depth} />
-                  </div>
-                </div>
 
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold tracking-wide" style={{ color: accent }}>
-                    {product.tagline}
-                  </p>
-                  <span dir="ltr" className="mt-1 block font-display text-xl font-black text-ink lg:text-2xl">
-                    {product.name}
-                  </span>
-                  <p className="mt-1 max-w-md text-sm leading-relaxed text-stone">
-                    {product.areas}
-                  </p>
-                </div>
+                  {/* 3. Box image */}
+                  {box && (
+                    <div className="relative h-12 w-8 shrink-0">
+                      <Image
+                        src={box.src}
+                        alt=""
+                        fill
+                        sizes="32px"
+                        className="hover-lift-image object-contain drop-shadow-[0_6px_12px_rgba(26,20,20,0.14)]"
+                        data-edit-id={`src/components/sections/ProductRange.tsx#box-${product.code}`}
+                      />
+                    </div>
+                  )}
 
-                <div className="flex shrink-0 items-center gap-6 border-hairline sm:border-s sm:ps-8">
-                  <DepthGauge depth={product.depth} size="sm" />
-                  <div className="text-xs leading-relaxed text-stone">
-                    <p className="font-bold text-ink">{product.duration}</p>
-                    <p dir="ltr">{product.particleSize}</p>
+                  {/* 4. Name + description */}
+                  <div className="min-w-0 flex-1">
+                    <span
+                      dir="ltr"
+                      className="rail-label block text-right font-display text-base font-black leading-tight text-ink"
+                      data-edit-id={`src/lib/data.ts#products-${product.code}-name`}
+                    >
+                      {product.name}
+                    </span>
+                    <p
+                      className="mt-0.5 truncate text-xs leading-snug text-stone"
+                      data-edit-id={`src/components/sections/ProductRange.tsx#cardDescriptions-${product.code}`}
+                    >
+                      {cardDescriptions[product.code]}
+                    </p>
                   </div>
+
+                  {/* 5. Arrow — leftmost element, unchanged behavior (Link -> /products) */}
                   <ArrowLeft
-                    size={20}
-                    className="hidden shrink-0 text-wine transition-transform duration-200 group-hover:-translate-x-1 lg:block"
+                    size={16}
+                    className="shrink-0 text-wine transition-transform duration-200 group-hover:-translate-x-1"
                   />
-                </div>
-              </Link>
-            </Reveal>
-          );
-        })}
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
