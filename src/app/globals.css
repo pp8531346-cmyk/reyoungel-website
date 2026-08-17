@@ -116,6 +116,18 @@ body {
   width: 100%;
 }
 
+/* Hero background: soft warm blend from blush into light warm-white — no pattern,
+ * no repeating texture. Built from existing brand tokens via color-mix (same
+ * technique as accentColor() in lib/utils.ts) rather than new hex values. */
+.hero-gradient-bg {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--color-wine) 7%, var(--color-ivory)) 0%,
+    var(--color-ivory) 55%,
+    color-mix(in srgb, var(--color-cream) 60%, var(--color-ivory)) 100%
+  );
+}
+
 .grain {
   pointer-events: none;
 }
@@ -129,6 +141,135 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-on-scroll.is-revealing {
+  will-change: opacity, transform;
+}
+
+/* Shared hover micro-interactions — buttons and cards, site-wide. Plain
+ * (un-layered) classes so they always take effect regardless of Tailwind's
+ * utility-layer ordering. `--hover-shadow` is an escape hatch: a variant with
+ * its own established hover shadow (e.g. Button's primary-glow wine glow) can
+ * set the variable instead of fighting this shared rule for the box-shadow
+ * property. Default shadow color is the same ink-based rgba(26,20,20,*) used
+ * for every other shadow already in the codebase — not a new invented color. */
+.hover-lift-btn {
+  transition:
+    transform 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow, 0 10px 20px -10px rgba(26, 20, 20, 0.35));
+}
+
+.hover-lift-card {
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hover-shadow, 0 16px 32px -16px rgba(26, 20, 20, 0.3));
+  border-color: color-mix(in srgb, var(--color-wine) 40%, var(--color-hairline));
+}
+
+.hover-lift-image {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift-card:hover .hover-lift-image {
+  transform: scale(1.03);
+}
+
+/* Numbered-rail hover — the "01/02/03 + label" pattern (Hero's side rail, About's
+ * milestone list, ProductRange's numbered product list). `.rail-item` is the
+ * hover trigger for standalone rows; where the number instead lives inside an
+ * already-hoverable `.hover-lift-card`, that card's own :hover drives it too,
+ * so the two systems compose instead of needing a separate wrapper. Color
+ * shifts the whole number+label pair to brand wine; scale is number-only. */
+.rail-number {
+  display: inline-block;
+  transition:
+    color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rail-label {
+  transition: color 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rail-item:hover .rail-number,
+.hover-lift-card:hover .rail-number {
+  color: var(--color-wine);
+  transform: scale(1.05);
+}
+
+.rail-item:hover .rail-label,
+.hover-lift-card:hover .rail-label {
+  color: var(--color-wine);
+}
+
+/* Icon+heading+description trio hover — a very subtle fill, nothing else
+ * changes. rgba(0,0,0,0.03) over the existing background rather than a flat
+ * #F8F8F8-ish gray, since a literal light-gray reads as a mismatched patch
+ * against this site's warm ivory tone — the overlay tints with whatever's
+ * underneath instead. */
+.feature-card-hover {
+  transition: background-color 250ms ease;
+}
+
+.feature-card-hover:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* HeroHighlights — the icon+heading+description row directly under the Hero.
+ * Given its own soft warm-gray base (blended from --color-stone into
+ * --color-ivory via color-mix, the same technique .hero-gradient-bg already
+ * uses, instead of a new invented hex) so the row reads as a distinct block
+ * against the Hero above it. Applied to the max-w-6xl card grid itself, NOT
+ * the full-bleed <section> — the section is wider than the grid on most
+ * viewports (mx-auto centers a narrower max-width row inside it), so a
+ * section-level background left gray margins outside the actual card row
+ * that didn't respond to hover and read as a stray oversized box. Card hover
+ * darkens to a clearly-visible shade of that same gray family (not a generic
+ * black overlay) plus a self-scale — reusing values already established
+ * elsewhere rather than inventing new ones: scale(1.03) and its 300ms
+ * cubic-bezier(0.4, 0, 0.2, 1) are exactly .hover-lift-image's values, and
+ * the 250ms ease background transition matches .feature-card-hover's own
+ * timing. */
+.hero-highlights-panel {
+  background: color-mix(in srgb, var(--color-stone) 8%, var(--color-ivory));
+}
+
+.hero-highlights-card {
+  position: relative;
+  transition:
+    background-color 250ms ease,
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-highlights-card:hover {
+  z-index: 1;
+  background-color: color-mix(in srgb, var(--color-stone) 20%, var(--color-ivory));
+  transform: scale(1.03);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -140,5 +281,19 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Shadow/border-color still change (just instantly, per the rule above) —
+   * only the lift/scale movement itself is dropped. */
+  .hover-lift-btn:hover,
+  .hover-lift-card:hover,
+  .hover-lift-card:hover .hover-lift-image {
+    transform: none !important;
+  }
+  .rail-item:hover .rail-number,
+  .hover-lift-card:hover .rail-number {
+    transform: none !important;
+  }
+  .hero-highlights-card:hover {
+    transform: none !important;
   }
 }
