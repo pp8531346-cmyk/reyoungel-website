@@ -60,10 +60,18 @@ export default function TechnologyPage() {
                 כל ג’ל המבוסס על חומצה היאלורונית עובר תהליך שזירה (Cross-Linking), שנועד לייצב את שרשראות החומצה ההיאלורונית ולהאריך את עמידות הג’ל ברקמה. במהלך תהליך זה נעשה שימוש בחומר השזירה BDDE, ולכן איכות תהליך הטיהור שלאחר השזירה מהווה שלב מרכזי בקביעת איכות המוצר הסופי.
               </p>
               <p className="max-w-xl text-base leading-relaxed text-stone lg:text-lg">
-                טכנולוגיית <span className="font-bold text-wine">SAX-HA®</span> הפטנטית
-                שלנו (פטנט מס&rsquo; ZL 2012 1 0372786.0) פותחה כדי לפתור בדיוק
-                את זה: תהליך טיהור מתקדם שמעניק לג&rsquo;ל רמת ניקיון וטיהור
-                גבוהה משמעותית משאריות ה-BDDE, לעומת שיטות שזירה סטנדרטיות —
+                <span data-edit-id="src/app/technology/page.tsx#s1-p1b-lead">
+                  {/* @edit:s1-p1b-lead */}
+                  טכנולוגיית{" "}
+                </span>
+                <span className="font-bold text-wine">SAX-HA®</span>
+                <span data-edit-id="src/app/technology/page.tsx#s1-p1b-mid">
+                  {/* @edit:s1-p1b-mid */}
+                  {" "}הפטנטית שלנו (פטנט מס&rsquo; ZL 2012 1 0372786.0) פותחה כדי
+                  לפתור בדיוק את זה: תהליך טיהור מתקדם שמעניק לג&rsquo;ל רמת
+                  ניקיון וטיהור גבוהה משמעותית משאריות ה-BDDE, לעומת שיטות
+                  שזירה סטנדרטיות —
+                </span>
                 <span data-edit-id="src/app/technology/page.tsx#s1-p2">
                   {/* @edit:s1-p2 */}
                   {" "}ג&rsquo;ל נקי יותר ופחות תגובות לוואי.
@@ -81,7 +89,7 @@ export default function TechnologyPage() {
             <Reveal delay={150} className="w-full max-w-sm lg:col-span-5 lg:max-w-none">
               <div className="relative aspect-[3/4] overflow-hidden rounded-tl-[3rem] rounded-br-[3rem] border border-hairline">
                 <Image
-                  src="/images/77f3a379-7b1d-4e35-9a8e-92b4d1d3ad1e-1786220857093.jpg"
+                  src="/images/5C3F908A-BD33-44B5-96CF-4714D1E3A76B-1786996879325.png"
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 24rem, 80vw"

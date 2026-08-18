@@ -4,14 +4,20 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { useEditMode } from "./EditModeContext";
 import positions from "./positions.json";
+import sizes from "./sizes.json";
 
 const UI_ATTR = "data-dev-editor-ui";
 const DRAG_THRESHOLD = 4;
+const TEXT_SCALE_STEP = 0.1;
+const TEXT_SCALE_MIN = 0.5;
+const TEXT_SCALE_MAX = 3;
+const IMAGE_SCALE_MIN = 0.25;
+const IMAGE_SCALE_MAX = 2;
 
 // Only serializable metadata lives in state (drives the toolbar UI). The actual
 // DOM element being edited lives in editingElementRef below — mutating DOM node
 // properties (style/textContent) through a state value trips the immutability lint.
-type TextEdit = { kind: "text"; oldText: string };
+type TextEdit = { kind: "text"; oldText: string; editId: string | null; scale: number };
 type ImageEdit = {
   kind: "image";
   oldPublicPath: string;
@@ -61,6 +67,25 @@ function hashText(text: string): string {
 function parseTranslate(transform: string): { x: number; y: number } {
   const match = transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
   return match ? { x: parseFloat(match[1]), y: parseFloat(match[2]) } : { x: 0, y: 0 };
+}
+
+function parseScale(transform: string): number {
+  const match = transform.match(/scale\(([-\d.]+)\)/);
+  return match ? parseFloat(match[1]) : 1;
+}
+
+/** Rewrites (or appends) the `scale(...)` term in a transform string, keeping any
+ * existing `translate(...)` term untouched — position and size are independent. */
+function withScale(transform: string, scale: number): string {
+  const translatePart = transform.match(/translate\([^)]*\)/)?.[0] ?? "";
+  return `${translatePart} scale(${scale})`.trim();
+}
+
+type SizeMap = Record<string, { kind: "text" | "image"; scale: number }>;
+
+function clampScale(kind: "text" | "image", scale: number): number {
+  const [min, max] = kind === "text" ? [TEXT_SCALE_MIN, TEXT_SCALE_MAX] : [IMAGE_SCALE_MIN, IMAGE_SCALE_MAX];
+  return Math.min(max, Math.max(min, scale));
 }
 
 function pillButtonStyle(bg: string): CSSProperties {
@@ -124,11 +149,33 @@ export function DevEditorOverlay() {
     return () => cancelAnimationFrame(raf);
   }, [pathname]);
 
+  // Re-applies any previously-saved text/image resize scale, keyed by data-edit-id —
+  // runs after the page's content is in the DOM, and again on every route change.
+  useEffect(() => {
+    const entries = Object.entries(sizes as SizeMap);
+    if (entries.length === 0) return;
+
+    const raf = requestAnimationFrame(() => {
+      for (const [id, size] of entries) {
+        const el = document.querySelector<HTMLElement>(`[data-edit-id="${CSS.escape(id)}"]`);
+        if (!el) continue;
+        if (size.kind === "text") {
+          el.style.fontSize = `${size.scale * 100}%`;
+        } else {
+          el.style.transform = withScale(el.style.transform || "", size.scale);
+        }
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [pathname]);
+
   useEffect(() => {
     if (!editMode) return;
 
     const hoveredRef: { current: HTMLElement | null } = { current: null };
     let suppressNextClick = false;
+    let resizeHandle: HTMLDivElement | null = null;
+    let resizeHandleFor: HTMLImageElement | null = null;
 
     function isInsideUi(el: Element) {
       return !!el.closest(`[${UI_ATTR}]`);
@@ -154,7 +201,13 @@ export function DevEditorOverlay() {
     function resolveEditableText(e: MouseEvent): HTMLElement | null {
       const target = e.target as Element;
       if (!target || isInsideUi(target)) return null;
-      if (target.closest("[data-dev-positionable]") || target.closest("img")) return null;
+      if (
+        target.closest("[data-dev-positionable]") ||
+        target.closest("img") ||
+        target.closest("[data-dev-no-edit]")
+      ) {
+        return null;
+      }
 
       const doc = document as Document & {
         caretRangeFromPoint?: (x: number, y: number) => Range | null;
@@ -169,7 +222,13 @@ export function DevEditorOverlay() {
       }
 
       const el = node ? (node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as Element)) : null;
-      if (el && !isInsideUi(el) && !el.closest("[data-dev-positionable]") && (el.textContent || "").trim()) {
+      if (
+        el &&
+        !isInsideUi(el) &&
+        !el.closest("[data-dev-positionable]") &&
+        !el.closest("[data-dev-no-edit]") &&
+        (el.textContent || "").trim()
+      ) {
         return el as HTMLElement;
       }
 
@@ -200,6 +259,15 @@ export function DevEditorOverlay() {
       }
 
       const img = target.closest("img");
+      if (img) {
+        const editId = img.getAttribute("data-edit-id");
+        if (editId) {
+          ensureResizeHandle(img as HTMLImageElement, editId);
+        } else if (resizeHandleFor && resizeHandleFor !== img) {
+          removeResizeHandle();
+        }
+      }
+
       const el = img ?? resolveEditableText(e);
       if (!el || el === hoveredRef.current) return;
 
@@ -214,11 +282,17 @@ export function DevEditorOverlay() {
       if (hoveredRef.current && (!related || !hoveredRef.current.contains(related))) {
         clearHoverOutline();
       }
+      if (resizeHandleFor && related !== resizeHandle && !resizeHandleFor.contains(related)) {
+        removeResizeHandle();
+      }
     }
 
     function startTextEdit(element: HTMLElement) {
       hoveredRef.current = null;
       const oldText = element.textContent || "";
+      const editId = element.closest("[data-edit-id]")?.getAttribute("data-edit-id") ?? null;
+      const currentFontSize = element.style.fontSize;
+      const scale = currentFontSize.endsWith("%") ? parseFloat(currentFontSize) / 100 : 1;
       element.setAttribute("contenteditable", "true");
       element.style.outline = "2px solid #ab213a";
       element.style.cursor = "text";
@@ -230,7 +304,7 @@ export function DevEditorOverlay() {
       sel?.addRange(range);
 
       editingElementRef.current = element;
-      setActiveEdit({ kind: "text", oldText });
+      setActiveEdit({ kind: "text", oldText, editId, scale: Number.isFinite(scale) ? scale : 1 });
       setStatus(null);
     }
 
@@ -251,6 +325,86 @@ export function DevEditorOverlay() {
           setTimeout(() => setStatus(null), 2000);
         })
         .catch(() => setStatus({ kind: "error", message: "Request failed" }));
+    }
+
+    function saveSizeRequest(id: string, kind: "text" | "image", scale: number) {
+      fetch("/api/dev-editor/save-size", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, kind, scale }),
+      })
+        .then(() => {
+          setStatus({ kind: "saved", message: "Saved size" });
+          setTimeout(() => setStatus(null), 2000);
+        })
+        .catch(() => setStatus({ kind: "error", message: "Request failed" }));
+    }
+
+    function removeResizeHandle() {
+      resizeHandle?.remove();
+      resizeHandle = null;
+      resizeHandleFor = null;
+    }
+
+    /** Corner drag handle for images carrying `data-edit-id` — a fixed-position sibling
+     * (not a child of the img) so it renders correctly regardless of the image's own
+     * positioning context, repositioned on hover rather than tracked continuously. */
+    function ensureResizeHandle(img: HTMLImageElement, editId: string) {
+      if (resizeHandleFor === img) return;
+      removeResizeHandle();
+
+      const handle = document.createElement("div");
+      handle.setAttribute(UI_ATTR, "true");
+      Object.assign(handle.style, {
+        position: "fixed",
+        width: "14px",
+        height: "14px",
+        borderRadius: "50%",
+        background: "#ab213a",
+        border: "2px solid #faf5ef",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.4)",
+        cursor: "nwse-resize",
+        zIndex: "9999",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      function reposition() {
+        const rect = img.getBoundingClientRect();
+        handle.style.left = `${rect.right - 7}px`;
+        handle.style.top = `${rect.bottom - 7}px`;
+      }
+      reposition();
+
+      handle.addEventListener("mousedown", (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const rect = img.getBoundingClientRect();
+        const baseScale = parseScale(img.style.transform || "");
+        const startX = e.clientX;
+        const startY = e.clientY;
+
+        function handleMove(moveEvent: MouseEvent) {
+          const dx = moveEvent.clientX - startX;
+          const dy = moveEvent.clientY - startY;
+          const delta = (dx + dy) / 2 / Math.max(rect.width, 1);
+          const scale = clampScale("image", baseScale + delta);
+          img.style.transform = withScale(img.style.transform || "", scale);
+          reposition();
+        }
+
+        function handleUp() {
+          document.removeEventListener("mousemove", handleMove);
+          document.removeEventListener("mouseup", handleUp);
+          const scale = parseScale(img.style.transform || "");
+          saveSizeRequest(editId, "image", scale);
+        }
+
+        document.addEventListener("mousemove", handleMove);
+        document.addEventListener("mouseup", handleUp);
+      });
+
+      document.body.appendChild(handle);
+      resizeHandle = handle;
+      resizeHandleFor = img;
     }
 
     /** Click drags the logo (and any future data-dev-positionable element) —
@@ -330,6 +484,12 @@ export function DevEditorOverlay() {
             return null;
           });
         } else {
+          // Editable text inside a <Link> (e.g. product cards) would otherwise
+          // navigate away the instant edit mode starts — the click event that
+          // follows this mouseup is a separate event mousedown's preventDefault()
+          // doesn't reach, so suppress it explicitly via the same flag the drag
+          // path already uses.
+          if (textEl.closest("a")) suppressNextClick = true;
           startTextEdit(textEl);
         }
       }
@@ -386,8 +546,27 @@ export function DevEditorOverlay() {
       document.removeEventListener("mouseover", handleMouseOver, true);
       document.removeEventListener("mouseout", handleMouseOut, true);
       clearHoverOutline();
+      removeResizeHandle();
     };
   }, [editMode]);
+
+  /** Font-size bump for the text block currently being edited — persisted immediately
+   * per click (like the position/image-resize drag), independent of the separate
+   * Save/Cancel for the text *content* edit. Requires editId: without one there's
+   * nowhere to persist to, so the control is hidden in that case (see JSX below). */
+  function bumpTextScale(delta: number) {
+    if (!activeEdit || activeEdit.kind !== "text" || !activeEdit.editId) return;
+    const element = editingElementRef.current;
+    if (!element) return;
+    const scale = clampScale("text", activeEdit.scale + delta);
+    element.style.fontSize = `${scale * 100}%`;
+    setActiveEdit({ ...activeEdit, scale });
+    fetch("/api/dev-editor/save-size", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: activeEdit.editId, kind: "text", scale }),
+    }).catch(() => setStatus({ kind: "error", message: "Request failed" }));
+  }
 
   function cancelEdit() {
     const element = editingElementRef.current;
@@ -415,7 +594,12 @@ export function DevEditorOverlay() {
       const res = await fetch("/api/dev-editor/save-text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ oldText: activeEdit.oldText, newText, fileHint }),
+        body: JSON.stringify({
+          oldText: activeEdit.oldText,
+          newText,
+          fileHint,
+          editId: activeEdit.editId ?? undefined,
+        }),
       });
       const data = await res.json();
       if (data.status === "saved") {
@@ -428,12 +612,32 @@ export function DevEditorOverlay() {
         setTimeout(() => setStatus(null), 2500);
       } else if (data.status === "ambiguous") {
         setStatus({ kind: "ambiguous", candidates: data.candidates });
+      } else if (data.status === "error") {
+        revertUnsavedEdit(element);
+        setStatus({ kind: "error", message: data.message || "Save failed" });
       } else {
+        revertUnsavedEdit(element);
         setStatus({ kind: "not_found" });
       }
     } catch {
+      revertUnsavedEdit(element);
       setStatus({ kind: "error", message: "Request failed" });
     }
+  }
+
+  // On a terminal (non-retryable) save failure, the element is left mid-edit —
+  // still contenteditable and showing the unsaved typed text — which reads as
+  // "it saved" until a reload silently reverts it. Undo the in-progress edit
+  // immediately so a failed Save is visibly, honestly a no-op.
+  function revertUnsavedEdit(element: HTMLElement | HTMLImageElement) {
+    if (activeEditRef.current?.kind === "text") {
+      element.textContent = activeEditRef.current.oldText;
+    }
+    element.removeAttribute("contenteditable");
+    element.style.outline = "";
+    element.style.cursor = "";
+    editingElementRef.current = null;
+    setActiveEdit(null);
   }
 
   function handleFileChosen(e: React.ChangeEvent<HTMLInputElement>) {
@@ -578,6 +782,27 @@ export function DevEditorOverlay() {
           {activeEdit?.kind === "text" && !status && (
             <>
               <span>Editing text — click Save when done.</span>
+              {activeEdit.editId && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ opacity: 0.7 }}>Size ({Math.round(activeEdit.scale * 100)}%)</span>
+                  <button
+                    onClick={() => bumpTextScale(-TEXT_SCALE_STEP)}
+                    disabled={activeEdit.scale <= TEXT_SCALE_MIN}
+                    style={pillButtonStyle("#5a5450")}
+                    title="Shrink text"
+                  >
+                    −
+                  </button>
+                  <button
+                    onClick={() => bumpTextScale(TEXT_SCALE_STEP)}
+                    disabled={activeEdit.scale >= TEXT_SCALE_MAX}
+                    style={pillButtonStyle("#5a5450")}
+                    title="Grow text"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
               <div style={{ display: "flex", gap: 8 }}>
                 <button onClick={() => saveTextEdit()} style={pillButtonStyle("#ab213a")}>
                   Save

@@ -70,10 +70,17 @@ export default function AboutPage() {
                 עשרים שנות התמחות, צוות מדעי בין-לאומי
               </h2>
               <p className="max-w-xl text-base leading-relaxed text-stone lg:text-lg">
-                טכנולוגיית <span className="font-bold text-wine">SAX-HA®</span> הפטנטית
-                שמאחורי Reyoungel® פותחה על ידי צוות מדענים ומהנדסים המתמחים
-                במכשור רפואי להזרקת ביופולימרים, עם ניסיון מצטבר של למעלה
-                מ-20 שנה משווייץ ומצרפת.
+                <span data-edit-id="src/app/about/page.tsx#s1-p1-lead">
+                  {/* @edit:s1-p1-lead */}
+                  טכנולוגיית{" "}
+                </span>
+                <span className="font-bold text-wine">SAX-HA®</span>
+                <span data-edit-id="src/app/about/page.tsx#s1-p1-tail">
+                  {/* @edit:s1-p1-tail */}
+                  {" "}הפטנטית שמאחורי Reyoungel® פותחה על ידי צוות מדענים ומהנדסים
+                  המתמחים במכשור רפואי להזרקת ביופולימרים, עם ניסיון מצטבר של
+                  למעלה מ-20 שנה משווייץ ומצרפת.
+                </span>
               </p>
               <p
                 className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
