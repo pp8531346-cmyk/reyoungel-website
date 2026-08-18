@@ -218,21 +218,34 @@ export function EnzymolysisChart({ className }: { className?: string }) {
       <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
         <span className="flex items-center gap-2 text-sm font-bold text-ink">
           <span className="h-2.5 w-2.5 rounded-full bg-wine" aria-hidden />
-          Reyoungel®
+          <span data-edit-id="src/components/decor/EnzymolysisChart.tsx#legend-reyoungel">
+            {/* @edit:legend-reyoungel */}
+            Reyoungel®
+          </span>
         </span>
         <span className="flex items-center gap-2 text-sm font-bold text-stone">
           <span className="h-2.5 w-2.5 rounded-full bg-stone" aria-hidden />
-          מותג מוביל באירופה
+          <span data-edit-id="src/components/decor/EnzymolysisChart.tsx#legend-competitor">
+            {/* @edit:legend-competitor */}
+            מותג מוביל באירופה
+          </span>
         </span>
       </div>
 
-      <p className="mx-auto mt-4 max-w-lg text-center text-xs leading-relaxed text-stone">
-        להמחשת המגמה בלבד, בקירוב לצורת הגרף המקורי מקטלוג Reyoungel — אינו
-        מהווה נתון קליני מדויק לפרסום.
+      <p
+        className="mx-auto mt-4 max-w-lg text-center text-xs leading-relaxed text-stone"
+        data-edit-id="src/components/decor/EnzymolysisChart.tsx#caption"
+      >
+        {/* @edit:caption */}
+        להמחשת המגמה בלבד
       </p>
 
       <details className="mx-auto mt-4 max-w-lg text-center">
-        <summary className="cursor-pointer text-xs font-bold text-plum underline decoration-plum/40 underline-offset-4 hover:decoration-plum">
+        <summary
+          className="cursor-pointer text-xs font-bold text-plum underline decoration-plum/40 underline-offset-4 hover:decoration-plum"
+          data-edit-id="src/components/decor/EnzymolysisChart.tsx#table-toggle"
+        >
+          {/* @edit:table-toggle */}
           הצג נתונים כטבלה
         </summary>
         <table className="mx-auto mt-4 w-full max-w-sm text-sm">

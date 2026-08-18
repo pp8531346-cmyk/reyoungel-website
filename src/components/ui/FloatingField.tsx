@@ -5,6 +5,11 @@ import { cn } from "@/lib/utils";
 type BaseProps = {
   label: string;
   error?: string;
+  /** Dev editor: the literal lives in the calling form, not here, so each caller
+   * supplies its own `data-edit-id` (with a matching `/* @edit:... *\/` marker
+   * placed next to its own `label=` literal) rather than this shared component
+   * owning one. */
+  labelEditId?: string;
 };
 
 type InputFieldProps = BaseProps &
@@ -17,7 +22,7 @@ export type FloatingFieldProps = InputFieldProps | TextareaFieldProps;
 
 export function FloatingField(props: FloatingFieldProps) {
   const autoId = useId();
-  const { label, error, className, id = autoId, ...rest } = props;
+  const { label, error, labelEditId, className, id = autoId, ...rest } = props;
   const errorId = `${id}-error`;
 
   const fieldClassName = cn(
@@ -54,7 +59,7 @@ export function FloatingField(props: FloatingFieldProps) {
             {...(rest as InputHTMLAttributes<HTMLInputElement>)}
           />
         )}
-        <label htmlFor={id} className={labelClassName}>
+        <label htmlFor={id} className={labelClassName} data-edit-id={labelEditId}>
           {label}
         </label>
       </div>

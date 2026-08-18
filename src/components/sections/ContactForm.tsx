@@ -67,8 +67,18 @@ export function ContactForm() {
         aria-live="polite"
         className="flex flex-col items-center gap-3 rounded-tr-[3rem] rounded-bl-[3rem] border border-hairline bg-cream px-8 py-16 text-center"
       >
-        <p className="font-display text-2xl font-black text-ink">תודה על פנייתכם</p>
-        <p className="max-w-sm text-sm leading-relaxed text-stone">
+        <p
+          className="font-display text-2xl font-black text-ink"
+          data-edit-id="src/components/sections/ContactForm.tsx#success-headline"
+        >
+          {/* @edit:success-headline */}
+          תודה על פנייתכם
+        </p>
+        <p
+          className="max-w-sm text-sm leading-relaxed text-stone"
+          data-edit-id="src/components/sections/ContactForm.tsx#success-body"
+        >
+          {/* @edit:success-body */}
           קיבלנו את פנייתכם, ונציג מטעם הצוות המקצועי שלנו יחזור אליכם בהקדם.
         </p>
       </div>
@@ -81,17 +91,25 @@ export function ContactForm() {
       onSubmit={handleSubmit}
       className="flex flex-col gap-5 rounded-tr-[3rem] rounded-bl-[3rem] border border-hairline bg-cream p-6 lg:p-10"
     >
-      <FloatingField name="name" label="שם מלא" autoComplete="name" error={errors.name} />
+      <FloatingField
+        name="name"
+        label={/* @edit:label-name */ "שם מלא"}
+        labelEditId="src/components/sections/ContactForm.tsx#label-name"
+        autoComplete="name"
+        error={errors.name}
+      />
       <FloatingField
         name="clinicName"
-        label="שם הקליניקה / המרפאה"
+        label={/* @edit:label-clinic */ "שם הקליניקה / המרפאה"}
+        labelEditId="src/components/sections/ContactForm.tsx#label-clinic"
         autoComplete="organization"
         error={errors.clinicName}
       />
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <FloatingField
           name="phone"
-          label="טלפון"
+          label={/* @edit:label-phone */ "טלפון"}
+          labelEditId="src/components/sections/ContactForm.tsx#label-phone"
           type="tel"
           inputMode="tel"
           dir="ltr"
@@ -100,7 +118,8 @@ export function ContactForm() {
         />
         <FloatingField
           name="email"
-          label="אימייל"
+          label={/* @edit:label-email */ "אימייל"}
+          labelEditId="src/components/sections/ContactForm.tsx#label-email"
           type="email"
           inputMode="email"
           spellCheck={false}
@@ -109,13 +128,23 @@ export function ContactForm() {
           error={errors.email}
         />
       </div>
-      <FloatingField as="textarea" name="message" label="הודעה" rows={5} error={errors.message} />
+      <FloatingField
+        as="textarea"
+        name="message"
+        label={/* @edit:label-message */ "הודעה"}
+        labelEditId="src/components/sections/ContactForm.tsx#label-message"
+        rows={5}
+        error={errors.message}
+      />
 
       <button
         type="submit"
         className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-wine bg-wine px-8 py-3 text-sm font-bold text-cream transition-colors duration-200 hover:border-wine-dark hover:bg-wine-dark active:scale-[0.97]"
       >
-        שליחת הפנייה
+        <span data-edit-id="src/components/sections/ContactForm.tsx#submit-label">
+          {/* @edit:submit-label */}
+          שליחת הפנייה
+        </span>
       </button>
     </form>
   );

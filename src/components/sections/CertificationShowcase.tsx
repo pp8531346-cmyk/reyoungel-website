@@ -36,7 +36,11 @@ export function CertificationShowcase() {
             >
               <div className="relative flex h-28 w-28 items-center justify-center rounded-full border-2 border-dashed border-wine/30 bg-wine/[0.03]">
                 <FileCheck2 className="h-8 w-8 text-wine/50" strokeWidth={1.5} aria-hidden />
-                <span className="absolute -bottom-3 whitespace-nowrap rounded-full border border-hairline bg-ivory px-2 py-0.5 text-[10px] font-bold tracking-wide text-stone">
+                <span
+                  className="absolute -bottom-3 whitespace-nowrap rounded-full border border-hairline bg-ivory px-2 py-0.5 text-[10px] font-bold tracking-wide text-stone"
+                  data-edit-id="src/components/sections/CertificationShowcase.tsx#placeholder-label"
+                >
+                  {/* @edit:placeholder-label */}
                   ממתין למסמך רשמי
                 </span>
               </div>

@@ -181,14 +181,21 @@ export function DevEditorOverlay() {
       return !!el.closest(`[${UI_ATTR}]`);
     }
 
+    /** Saving always looks up its target by `data-edit-id` and splices text in at that
+     * marker's position — it never re-locates content by matching old against new text
+     * (see save-text/route.ts). That only works if the exact DOM node we hand back here
+     * carries `data-edit-id` directly, so an edit session can only ever start on a node
+     * whose id-based save target is unambiguous. Walking up to a marked *ancestor*
+     * instead would let `newText` (this node's own, narrower content) get spliced in at
+     * the ancestor's marker — silently dropping or duplicating whatever unmarked content
+     * sits between them. So: direct match or no edit, never a marked ancestor. */
     function findEditableTextFallback(start: Element): HTMLElement | null {
       let el: Element | null = start;
       let depth = 0;
       while (el && depth < 8) {
-        const hasDirectText = Array.from(el.childNodes).some(
-          (node) => node.nodeType === Node.TEXT_NODE && (node.textContent || "").trim().length > 0,
-        );
-        if (hasDirectText) return el as HTMLElement;
+        if (el.hasAttribute("data-edit-id") && (el.textContent || "").trim()) {
+          return el as HTMLElement;
+        }
         el = el.parentElement;
         depth++;
       }
@@ -197,7 +204,10 @@ export function DevEditorOverlay() {
 
     /** Resolves the actual text-owning element under the cursor. Uses the browser's
      * own caret-hit-testing (precise, works at any DOM nesting depth) with an
-     * ancestor-walk fallback for the rare case a caret position isn't available. */
+     * ancestor-walk fallback for the rare case a caret position isn't available.
+     * Only ever returns a node carrying `data-edit-id` directly — see
+     * findEditableTextFallback's comment for why that's a hard requirement, not
+     * just a preference. */
     function resolveEditableText(e: MouseEvent): HTMLElement | null {
       const target = e.target as Element;
       if (!target || isInsideUi(target)) return null;
@@ -227,6 +237,7 @@ export function DevEditorOverlay() {
         !isInsideUi(el) &&
         !el.closest("[data-dev-positionable]") &&
         !el.closest("[data-dev-no-edit]") &&
+        el.hasAttribute("data-edit-id") &&
         (el.textContent || "").trim()
       ) {
         return el as HTMLElement;
@@ -584,8 +595,8 @@ export function DevEditorOverlay() {
     setStatus(null);
   }
 
-  async function saveTextEdit(fileHint?: string) {
-    if (!activeEdit || activeEdit.kind !== "text") return;
+  async function saveTextEdit() {
+    if (!activeEdit || activeEdit.kind !== "text" || !activeEdit.editId) return;
     const element = editingElementRef.current;
     if (!element) return;
     const newText = element.textContent || "";
@@ -594,12 +605,7 @@ export function DevEditorOverlay() {
       const res = await fetch("/api/dev-editor/save-text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          oldText: activeEdit.oldText,
-          newText,
-          fileHint,
-          editId: activeEdit.editId ?? undefined,
-        }),
+        body: JSON.stringify({ newText, editId: activeEdit.editId }),
       });
       const data = await res.json();
       if (data.status === "saved") {
@@ -845,7 +851,7 @@ export function DevEditorOverlay() {
               {status.candidates.map((c) => (
                 <button
                   key={c.file}
-                  onClick={() => saveTextEdit(c.file)}
+                  onClick={() => saveTextEdit()}
                   style={{ ...pillButtonStyle("#5a5450"), textAlign: "start" }}
                 >
                   {c.file} ({c.matches})

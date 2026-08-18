@@ -100,14 +100,18 @@ export function CrossLinkDiagram({
         <span
           className="transition-opacity duration-700"
           style={{ opacity: purified ? 0.35 : 1 }}
+          data-edit-id="src/components/decor/CrossLinkDiagram.tsx#label-standard"
         >
+          {/* @edit:label-standard */}
           שזירה סטנדרטית
         </span>
         <span
           dir="ltr"
           className={cn(onWine ? "text-cream" : "text-wine", "transition-opacity duration-700")}
           style={{ opacity: purified ? 1 : 0.35 }}
+          data-edit-id="src/components/decor/CrossLinkDiagram.tsx#label-saxha"
         >
+          {/* @edit:label-saxha */}
           SAX-HA®
         </span>
       </div>

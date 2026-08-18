@@ -19,6 +19,7 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
       <motion.p
         {...rise(0)}
         className="text-xs font-bold tracking-[0.3em] text-stone"
+        data-edit-id="src/lib/productShowcaseContent.ts#showcaseIntro-eyebrow"
       >
         {showcaseIntro.eyebrow}
       </motion.p>
@@ -26,6 +27,7 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
       <motion.h1
         {...rise(0.1)}
         className="max-w-3xl text-balance font-display text-[clamp(1.5rem,3.4vw,2.75rem)] font-black leading-[1.15] text-ink"
+        data-edit-id="src/lib/productShowcaseContent.ts#showcaseIntro-headline"
       >
         {showcaseIntro.headline}
       </motion.h1>
@@ -76,6 +78,7 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
                     fill
                     sizes="10vw"
                     className="object-contain drop-shadow-[0_10px_20px_rgba(26,20,20,0.14)] transition-[filter] duration-300 group-hover:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)] group-focus-visible:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)]"
+                    data-edit-id={`src/lib/productShowcaseContent.ts#heroBoxes-${box.code}`}
                   />
                 </motion.div>
               </button>
@@ -85,7 +88,13 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
       </motion.div>
 
       <motion.div {...rise(0.5)} className="flex flex-col items-center gap-1.5 text-stone">
-        <span className="text-[11px] font-bold tracking-[0.2em]">גלו את הסדרה</span>
+        <span
+          className="text-[11px] font-bold tracking-[0.2em]"
+          data-edit-id="src/components/products-showcase/ShowcaseIntro.tsx#scroll-hint"
+        >
+          {/* @edit:scroll-hint */}
+          גלו את הסדרה
+        </span>
         <ChevronDown className="h-4 w-4 animate-bounce" aria-hidden />
       </motion.div>
     </section>

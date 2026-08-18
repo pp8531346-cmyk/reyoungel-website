@@ -60,11 +60,12 @@ export function Navbar() {
         <span aria-hidden className="block h-px w-[85px] shrink-0" />
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {navLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               className="link-underline text-sm font-bold text-cream/85 transition-colors hover:text-cream"
+              data-edit-id={`src/lib/data.ts#navLinks-${i}-label`}
             >
               {link.label}
             </Link>
@@ -73,8 +74,10 @@ export function Navbar() {
 
         <Link
           href="/contact"
-          className="hidden rounded-full border border-cream/40 px-5 py-2 text-sm font-bold text-cream transition-colors hover:bg-cream/10 sm:inline-flex md:hidden lg:inline-flex"
+          className="hover-lift-btn hidden rounded-full border border-cream/40 px-5 py-2 text-sm font-bold text-cream transition-colors hover:bg-cream/10 sm:inline-flex md:hidden lg:inline-flex"
+          data-edit-id="src/components/layout/Navbar.tsx#contact-link-desktop"
         >
+          {/* @edit:contact-link-desktop */}
           צור קשר
         </Link>
 
@@ -95,12 +98,13 @@ export function Navbar() {
           id="mobile-nav"
           className="flex flex-col gap-1 border-t border-cream/15 bg-wine px-6 pb-6 pt-2 md:hidden"
         >
-          {navLinks.map((link) => (
+          {navLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
               className="py-3 text-base font-bold text-cream/90 transition-colors hover:text-cream"
+              data-edit-id={`src/lib/data.ts#navLinks-${i}-label`}
             >
               {link.label}
             </Link>
@@ -108,8 +112,10 @@ export function Navbar() {
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="mt-2 inline-flex w-fit rounded-full border border-cream/40 px-5 py-2 text-sm font-bold text-cream transition-colors hover:bg-cream/10"
+            className="hover-lift-btn mt-2 inline-flex w-fit rounded-full border border-cream/40 px-5 py-2 text-sm font-bold text-cream transition-colors hover:bg-cream/10"
+            data-edit-id="src/components/layout/Navbar.tsx#contact-link-mobile"
           >
+            {/* @edit:contact-link-mobile */}
             צור קשר
           </Link>
         </nav>
@@ -124,7 +130,10 @@ export function Navbar() {
         className="absolute right-6 top-1 z-10 lg:right-10"
         style={{ transform: `translate(${logoOffset.x}px, ${logoOffset.y}px)` }}
       >
-        <Logo imgClassName="h-[56px] w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)]" />
+        <Logo
+          imgClassName="h-[56px] w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)]"
+          data-edit-id="src/components/layout/Navbar.tsx#navbar-logo-img"
+        />
       </Link>
     </header>
   );

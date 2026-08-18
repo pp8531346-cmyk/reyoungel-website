@@ -73,6 +73,7 @@ export function ProductJourney({
               sizes="(min-width: 1024px) 24rem, 60vw"
               className="object-cover"
               style={{ objectPosition: journeyImage.focus }}
+              data-edit-id="src/lib/productShowcaseContent.ts#journeyImage"
             />
             <AnimatePresence mode="wait">
               <motion.div
@@ -104,7 +105,11 @@ export function ProductJourney({
                   {String(activeIndex + 1).padStart(2, "0")}
                 </span>
                 <span className="h-px w-8 bg-hairline" aria-hidden />
-                <span className="text-xs font-bold tracking-wide" style={{ color: entry.accent }}>
+                <span
+                  className="text-xs font-bold tracking-wide"
+                  style={{ color: entry.accent }}
+                  data-edit-id={`src/lib/data.ts#products-${product.code}-tagline`}
+                >
                   {product.tagline}
                 </span>
               </motion.div>
@@ -113,17 +118,33 @@ export function ProductJourney({
                 variants={textItem}
                 dir="ltr"
                 className="mt-3 text-right font-display text-3xl font-black leading-[1.05] text-ink lg:text-5xl"
+                data-edit-id={`src/lib/data.ts#products-${product.code}-name`}
               >
                 {product.name}
               </motion.h2>
 
-              <motion.p variants={textItem} className="mt-3 max-w-lg text-sm leading-relaxed text-stone lg:text-base">
+              <motion.p
+                variants={textItem}
+                className="mt-3 max-w-lg text-sm leading-relaxed text-stone lg:text-base"
+                data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-description`}
+              >
                 {entry.description}
               </motion.p>
 
               <motion.div variants={textItem} className="mt-3">
-                <p className="text-[11px] font-bold tracking-wide text-plum">אזורי טיפול עיקריים</p>
-                <p className="mt-1 max-w-lg text-sm leading-relaxed text-ink">{product.areas}</p>
+                <p
+                  className="text-[11px] font-bold tracking-wide text-plum"
+                  data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-areas"
+                >
+                  {/* @edit:label-areas */}
+                  אזורי טיפול עיקריים
+                </p>
+                <p
+                  className="mt-1 max-w-lg text-sm leading-relaxed text-ink"
+                  data-edit-id={`src/lib/data.ts#products-${product.code}-areas`}
+                >
+                  {product.areas}
+                </p>
               </motion.div>
 
               <motion.div
@@ -134,40 +155,79 @@ export function ProductJourney({
                 <div className="flex-1">
                   <dl className="grid grid-cols-2">
                     <div className="border-e border-b border-catalog-gray pb-3 pe-6">
-                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70">עומק הזרקה</dt>
-                      <dd className="mt-1 font-display text-xl font-black leading-none text-ink lg:text-2xl">
+                      <dt
+                        className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                        data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-depth"
+                      >
+                        {/* @edit:label-depth */}
+                        עומק הזרקה
+                      </dt>
+                      <dd
+                        className="mt-1 font-display text-xl font-black leading-none text-ink lg:text-2xl"
+                        data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-injectionDepth`}
+                      >
                         {entry.injectionDepth}
                       </dd>
                     </div>
                     <div className="border-b border-catalog-gray pb-3 ps-6">
-                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70">מבנה הג׳ל</dt>
+                      <dt
+                        className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                        data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-structure"
+                      >
+                        {/* @edit:label-structure */}
+                        מבנה הג׳ל
+                      </dt>
                       <dd
                         dir="ltr"
                         className="mt-1 text-right font-display text-xl font-black leading-none tabular-nums text-ink lg:text-2xl"
+                        data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-structureLabel`}
                       >
                         {entry.structureLabel}
                       </dd>
                     </div>
                     <div className="border-e border-b border-catalog-gray py-3 pe-6">
-                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70">ריכוז HA</dt>
+                      <dt
+                        className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                        data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-concentration"
+                      >
+                        {/* @edit:label-concentration */}
+                        ריכוז HA
+                      </dt>
                       <dd
                         dir="ltr"
                         className="mt-1 text-right font-display text-xl font-black leading-none tabular-nums text-ink lg:text-2xl"
+                        data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-haConcentration`}
                       >
                         {entry.haConcentration}
                       </dd>
                     </div>
                     <div className="border-b border-catalog-gray py-3 ps-6">
-                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70">משך תוצאה</dt>
-                      <dd className="mt-1 font-display text-xl font-black leading-none text-ink lg:text-2xl">
+                      <dt
+                        className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                        data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-duration"
+                      >
+                        {/* @edit:label-duration */}
+                        משך תוצאה
+                      </dt>
+                      <dd
+                        className="mt-1 font-display text-xl font-black leading-none text-ink lg:text-2xl"
+                        data-edit-id={`src/lib/data.ts#products-${product.code}-duration`}
+                      >
                         {product.duration}
                       </dd>
                     </div>
                     <div className="col-span-2 pt-3">
-                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70">מחט מומלצת</dt>
+                      <dt
+                        className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                        data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-needle"
+                      >
+                        {/* @edit:label-needle */}
+                        מחט מומלצת
+                      </dt>
                       <dd
                         dir="ltr"
                         className="mt-1 text-right font-display text-xl font-black leading-none tabular-nums text-ink lg:text-2xl"
+                        data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-needleGauge`}
                       >
                         {entry.needleGauge}
                       </dd>

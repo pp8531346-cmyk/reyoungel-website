@@ -22,7 +22,11 @@ export function DepthGauge({
   return (
     <div className="flex flex-col items-center gap-1.5">
       {isLg && (
-        <span className={cn("text-[10px] font-bold tracking-wide", onWine ? "text-cream/60" : "text-stone")}>
+        <span
+          className={cn("text-[10px] font-bold tracking-wide", onWine ? "text-cream/60" : "text-stone")}
+          data-edit-id="src/components/ui/DepthGauge.tsx#label-dermal"
+        >
+          {/* @edit:label-dermal */}
           עורי
         </span>
       )}
@@ -50,7 +54,11 @@ export function DepthGauge({
         />
       </div>
       {isLg && (
-        <span className={cn("text-[10px] font-bold tracking-wide", onWine ? "text-cream/60" : "text-stone")}>
+        <span
+          className={cn("text-[10px] font-bold tracking-wide", onWine ? "text-cream/60" : "text-stone")}
+          data-edit-id="src/components/ui/DepthGauge.tsx#label-subdermal"
+        >
+          {/* @edit:label-subdermal */}
           תת-עורי
         </span>
       )}

@@ -38,10 +38,16 @@ export function CtaBand() {
             </h2>
             <div className="flex flex-wrap justify-center gap-4 lg:shrink-0 lg:flex-nowrap lg:justify-end">
               <Button href="/contact" variant="primary-on-wine">
-                צרו קשר עם הצוות המקצועי
+                <span data-edit-id="src/components/sections/CtaBand.tsx#cta-primary-label">
+                  {/* @edit:cta-primary-label */}
+                  צרו קשר עם הצוות המקצועי
+                </span>
               </Button>
               <Button href="/products" variant="outline-on-wine">
-                לכל המוצרים
+                <span data-edit-id="src/components/sections/CtaBand.tsx#cta-secondary-label">
+                  {/* @edit:cta-secondary-label */}
+                  לכל המוצרים
+                </span>
               </Button>
             </div>
           </Reveal>

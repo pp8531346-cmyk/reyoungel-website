@@ -154,8 +154,18 @@ export default function TechnologyPage() {
           </Reveal>
 
           <Reveal delay={200} className="mx-auto mt-10 max-w-2xl text-center text-base leading-relaxed text-stone lg:text-lg">
-            הטכנולוגיה עברה מחקר טרום-שיווקי בהשתתפות{" "}
-            <span className="font-bold text-ink">357 מטופלים</span> בסין וברוסיה.
+            <span data-edit-id="src/app/technology/page.tsx#s3-p2-lead">
+              {/* @edit:s3-p2-lead */}
+              הטכנולוגיה עברה מחקר טרום-שיווקי בהשתתפות{" "}
+            </span>
+            <span className="font-bold text-ink" data-edit-id="src/app/technology/page.tsx#s3-p2-count">
+              {/* @edit:s3-p2-count */}
+              357 מטופלים
+            </span>
+            <span data-edit-id="src/app/technology/page.tsx#s3-p2-tail">
+              {/* @edit:s3-p2-tail */}
+              {" "}בסין וברוסיה.
+            </span>
           </Reveal>
         </section>
 

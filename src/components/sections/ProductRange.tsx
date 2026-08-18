@@ -53,11 +53,14 @@ export function ProductRange() {
             data-edit-id="src/components/sections/ProductRange.tsx#headline"
           >
             {/* @edit:headline */}
-            לכל אזורי הטיפול
+            
           </h2>
         </div>
         <Button href="/products" variant="outline" className="shrink-0">
-          לכל המוצרים
+          <span data-edit-id="src/components/sections/ProductRange.tsx#cta-label">
+            {/* @edit:cta-label */}
+            לכל המוצרים
+          </span>
         </Button>
       </Reveal>
 

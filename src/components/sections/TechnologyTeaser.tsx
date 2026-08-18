@@ -28,29 +28,28 @@ export function TechnologyTeaser() {
             data-edit-id="src/components/sections/TechnologyTeaser.tsx#eyebrow"
           >
             {/* @edit:eyebrow */}
-            הטכנולוגיה שמאחורי התוצאה
+            הטכנולוגיה שמאחורי Reyoungel
           </p>
           <h2
             className="max-w-md font-display text-3xl font-black leading-tight lg:text-4xl"
             data-edit-id="src/components/sections/TechnologyTeaser.tsx#headline"
           >
             {/* @edit:headline */}
-            SAX-HA® — שזירה נקייה יותר, תוצאה שנשארת יותר זמן
+            SAX-HA®- טכנולוגיית ההצלבה הייחודית של Reyoungel
           </h2>
           <p className="max-w-md text-base leading-relaxed text-cream/85">
             <span data-edit-id="src/components/sections/TechnologyTeaser.tsx#body">
               {/* @edit:body */}
-              הפטנט הבלעדי שלנו (ZL 2012 1 0372786.0) מסלק שיעור גבוה יותר של
-              שאריות מצלב ה-BDDE מהג&rsquo;ל, לעומת שזירה סטנדרטית מבוססת
-              BDDE/DVS — ומכאן פחות תגובות רגישות, ושימור טוב יותר של נפח הג&rsquo;ל
-              במקום ההזרקה.
+              בזכות הפטנט הבלעדי שלנו (ZL 2012 1 0372786.0),טכנולוגיית ההצלבה של Reyoungel מסלקת שיעור גבוה משמעותית של שאריות מצלב ה-BDDE מהג’ל ,לעומת שיטות הצלבה סטנדרטיות מבוססות BDDE/DVS התוצאה:פחות תגובות רגישות, ושימור של נפח הג’ל לאורך זמן במקום ההזרקה                        
             </span>
             <Citation n={2} onWine />
           </p>
           <Link
             href="/technology"
             className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-cream underline decoration-cream/40 underline-offset-4 hover:decoration-cream"
+            data-edit-id="src/components/sections/TechnologyTeaser.tsx#cta-link"
           >
+            {/* @edit:cta-link */}
             לעומק הטכנולוגיה והנתונים הקליניים
           </Link>
         </Reveal>

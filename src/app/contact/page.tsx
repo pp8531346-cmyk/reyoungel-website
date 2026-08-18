@@ -16,7 +16,14 @@ export default function ContactPage() {
     <>
       <Navbar />
       <main>
-        <PageHero eyebrow="צור קשר" title="בואו נדבר על שיתוף פעולה מקצועי">
+        <PageHero
+          eyebrow="צור קשר"
+          title="בואו נדבר על שיתוף פעולה מקצועי"
+          eyebrowEditId="src/app/contact/page.tsx#hero-eyebrow"
+          titleEditId="src/app/contact/page.tsx#hero-title"
+          descriptionEditId="src/app/contact/page.tsx#hero-description"
+        >
+          {/* @edit:hero-description */}
           לרופאים, קליניקות ומרכזי רפואה אסתטית המעוניינים לשלב את Reyoungel®
           בפרקטיקה שלהם — נשמח לשמוע מכם ולספק את כל המידע המקצועי הנדרש.
         </PageHero>
@@ -35,10 +42,18 @@ export default function ContactPage() {
                     — it had no viewport-height constraint like ProductRange's,
                     so the smaller size here was an unexplained inconsistency
                     rather than a deliberate exception. */}
-                <h2 className="max-w-sm font-display text-3xl font-black text-ink lg:text-4xl">
+                <h2
+                  className="max-w-sm font-display text-3xl font-black text-ink lg:text-4xl"
+                  data-edit-id="src/app/contact/page.tsx#s1-headline"
+                >
+                  {/* @edit:s1-headline */}
                   לרופאים, קליניקות ומרכזי רפואה אסתטית
                 </h2>
-                <p className="mt-4 max-w-sm text-sm leading-relaxed text-stone lg:text-base">
+                <p
+                  className="mt-4 max-w-sm text-sm leading-relaxed text-stone lg:text-base"
+                  data-edit-id="src/app/contact/page.tsx#s1-p1"
+                >
+                  {/* @edit:s1-p1 */}
                   מלאו את הפרטים ונציג מטעם הצוות המקצועי שלנו יחזור אליכם עם
                   מידע על המוצרים, התיעוד הרגולטורי, וזמינות להזמנה עבור
                   הקליניקה שלכם.
@@ -46,8 +61,18 @@ export default function ContactPage() {
               </div>
 
               <div className="border-t border-hairline pt-6">
-                <p className="text-xs font-bold tracking-wide text-plum">Bioha Laboratories Group Ltd</p>
-                <p className="mt-2 text-sm leading-relaxed text-stone">
+                <p
+                  className="text-xs font-bold tracking-wide text-plum"
+                  data-edit-id="src/app/contact/page.tsx#company-name"
+                >
+                  {/* @edit:company-name */}
+                  Bioha Laboratories Group Ltd
+                </p>
+                <p
+                  className="mt-2 text-sm leading-relaxed text-stone"
+                  data-edit-id="src/app/contact/page.tsx#company-address"
+                >
+                  {/* @edit:company-address */}
                   9 Pantygraigwen Road, Pontypridd, UK CF37 2RR
                 </p>
               </div>
