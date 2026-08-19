@@ -81,13 +81,30 @@ export function isMarkerAmbiguous(content: string, slug: string): boolean {
   return (matches?.length ?? 0) > 1;
 }
 
+/** Matches a `{" "}`-style JSX expression that holds nothing but a literal string,
+ * right at the start of `text` — used on both sides of a raw text run to swallow
+ * leading/trailing space-forcing expressions into the replaced region (see
+ * replaceAfterMarker's doc comment for why). Returns the match length, or 0. */
+function literalExpressionLength(text: string): number {
+  return /^\{\s*(['"`])(?:[^\\]|\\.)*?\1\s*\}/.exec(text)?.[0].length ?? 0;
+}
+
 /**
  * Locates the literal immediately following an `/* @edit:<slug> *\/` marker comment and
  * splices in `newText` — purely structural (marker position), no text-content matching,
  * so it can't be confused by whitespace differences or duplicate strings elsewhere.
- * Handles two shapes:
+ * Handles three shapes:
  *   - a quoted string literal right after the marker (array/prop values in .ts/.tsx)
  *   - a raw JSX text run right after the marker, up to the next `<` or `{`
+ *   - a raw JSX text run with one or more `{" "}`-style expressions immediately before
+ *     and/or after it, holding nothing but a literal string (used to force a leading or
+ *     trailing space next to a marker or a neighboring element). These get swallowed
+ *     into the replaced region rather than preserved, since `newText` already carries
+ *     any such space as a plain character, captured straight from the live DOM's
+ *     textContent. Without this, a leading one would leave the scan below with zero
+ *     width to replace (silently inserting newText next to the untouched original
+ *     instead of replacing it), and a trailing one would survive untouched, stacking a
+ *     redundant space onto newText's own.
  */
 export function replaceAfterMarker(
   content: string,
@@ -99,6 +116,14 @@ export function replaceAfterMarker(
 
   let i = match.index + match[0].length;
   while (i < content.length && /\s/.test(content[i])) i++;
+  const leftEdge = i; // preserves the original indentation between marker and content
+
+  for (;;) {
+    const len = literalExpressionLength(content.slice(i));
+    if (!len) break;
+    i += len;
+    while (i < content.length && /\s/.test(content[i])) i++;
+  }
 
   const quoteChars = new Set(['"', "'", "`"]);
   const ch = content[i];
@@ -115,13 +140,19 @@ export function replaceAfterMarker(
     return { ok: true, content: content.slice(0, i + 1) + escaped + content.slice(j) };
   }
 
-  // Raw JSX text run: scan to the next tag/expression boundary, then trim trailing
-  // whitespace off the run so the original indentation before that boundary survives.
+  // Raw JSX text run: scan to the next tag/expression boundary. If that boundary is
+  // itself a swallowable literal expression, absorb it and keep scanning for the real
+  // boundary, then trim trailing whitespace so the original indentation survives.
   let j = i;
-  while (j < content.length && content[j] !== "<" && content[j] !== "{") j++;
-  if (j >= content.length) return { ok: false };
+  for (;;) {
+    while (j < content.length && content[j] !== "<" && content[j] !== "{") j++;
+    if (j >= content.length) return { ok: false };
+    const len = literalExpressionLength(content.slice(j));
+    if (!len) break;
+    j += len;
+  }
   let end = j;
   while (end > i && /\s/.test(content[end - 1])) end--;
 
-  return { ok: true, content: content.slice(0, i) + newText + content.slice(end) };
+  return { ok: true, content: content.slice(0, leftEdge) + newText + content.slice(end) };
 }
