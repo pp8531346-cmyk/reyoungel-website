@@ -133,6 +133,7 @@ export const showcaseEntries: ShowcaseEntry[] = [
       { id: "chin", label: /* @edit:showcaseEntries-R004-markers-chin-label */ "סנטר", x: 55.6, y: 74.9 },
       { id: "cheekbones", label: /* @edit:showcaseEntries-R004-markers-cheekbones-label */ "עצמות לחיים", x: 75.5, y: 47.5 },
       { id: "cheek-volume", label: /* @edit:showcaseEntries-R004-markers-cheek-volume-label */ "אף", x: 51.8, y: 47.6 },
+      { id: "temples", label: /* @edit:showcaseEntries-R004-markers-temples-label */ "רקות", x: 69, y: 34 },
     ],
   },
   {
@@ -149,6 +150,7 @@ export const showcaseEntries: ShowcaseEntry[] = [
       { id: "chin", label: /* @edit:showcaseEntries-R005-markers-chin-label */ "סנטר", x: 54.6, y: 74.4 },
       { id: "cheekbones", label: /* @edit:showcaseEntries-R005-markers-cheekbones-label */ "עצמות לחיים", x: 75.9, y: 49.6 },
       { id: "nose", label: /* @edit:showcaseEntries-R005-markers-nose-label */ "אף", x: 52.4, y: 47.9 },
+      { id: "temples", label: /* @edit:showcaseEntries-R005-markers-temples-label */ "רקות", x: 69, y: 34 },
     ],
   },
 ];
