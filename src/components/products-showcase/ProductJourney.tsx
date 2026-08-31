@@ -62,9 +62,9 @@ export function ProductJourney({
       aria-label="כל המוצרים"
       className="relative flex h-screen flex-col justify-center gap-[clamp(0.75rem,2.2vh,1.5rem)] overflow-hidden border-t border-hairline bg-ivory px-6 pb-[3vh] pt-[max(5.5rem,3vh)] lg:px-10"
     >
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-12 lg:gap-16">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-3 lg:grid-cols-12 lg:gap-16">
         <div className="relative mx-auto lg:col-span-5">
-          <div className="relative mx-auto aspect-[4/5] h-[27vh] overflow-hidden rounded-tl-[2.5rem] rounded-br-[2.5rem] bg-stone/10 shadow-[0_30px_60px_-30px_rgba(26,20,20,0.25)] lg:h-[62vh]">
+          <div className="relative mx-auto aspect-[4/5] h-[33vh] overflow-hidden rounded-tl-[2.5rem] rounded-br-[2.5rem] bg-stone/10 shadow-[0_30px_60px_-30px_rgba(26,20,20,0.25)] lg:h-[62vh]">
             <Image
               src={journeyImage.src}
               alt="מודל להדגמת אזורי הזרקה"
@@ -117,7 +117,7 @@ export function ProductJourney({
               <motion.h2
                 variants={textItem}
                 dir="ltr"
-                className="mt-3 text-right font-display text-3xl font-black leading-[1.05] text-ink lg:text-5xl"
+                className="mt-2 text-right font-display text-3xl font-black leading-[1.05] text-ink lg:mt-3 lg:text-5xl"
                 data-edit-id={`src/lib/data.ts#products-${product.code}-name`}
               >
                 {product.name}
@@ -125,13 +125,13 @@ export function ProductJourney({
 
               <motion.p
                 variants={textItem}
-                className="mt-3 max-w-lg text-sm leading-relaxed text-stone lg:text-base"
+                className="mt-2 max-w-lg text-sm leading-relaxed text-stone lg:mt-3 lg:text-base"
                 data-edit-id={`src/lib/productShowcaseContent.ts#showcaseEntries-${product.code}-description`}
               >
                 {entry.description}
               </motion.p>
 
-              <motion.div variants={textItem} className="mt-3">
+              <motion.div variants={textItem} className="mt-2 lg:mt-3">
                 <p
                   className="text-[11px] font-bold tracking-wide text-plum"
                   data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-areas"
@@ -149,12 +149,12 @@ export function ProductJourney({
 
               <motion.div
                 variants={textItem}
-                className="mt-5 flex w-full items-stretch gap-6 border-t border-catalog-gray pt-5 lg:gap-10 lg:pt-6"
+                className="mt-2 flex w-full items-stretch gap-6 border-t border-catalog-gray pt-2 lg:mt-5 lg:gap-10 lg:pt-6"
               >
                 <DepthGauge depth={product.depth} size="lg" trackColor="catalog-gray" />
                 <div className="flex-1">
                   <dl className="grid grid-cols-2">
-                    <div className="border-e border-b border-catalog-gray pb-3 pe-6">
+                    <div className="border-e border-b border-catalog-gray pb-2 pe-6 lg:pb-3">
                       <dt
                         className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
                         data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-depth"
@@ -169,7 +169,7 @@ export function ProductJourney({
                         {entry.injectionDepth}
                       </dd>
                     </div>
-                    <div className="border-b border-catalog-gray pb-3 ps-6">
+                    <div className="border-b border-catalog-gray pb-2 ps-6 lg:pb-3">
                       <dt
                         className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
                         data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-structure"
@@ -185,7 +185,7 @@ export function ProductJourney({
                         {entry.structureLabel}
                       </dd>
                     </div>
-                    <div className="border-e border-b border-catalog-gray py-3 pe-6">
+                    <div className="border-e border-b border-catalog-gray py-2 pe-6 lg:py-3">
                       <dt
                         className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
                         data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-concentration"
@@ -201,7 +201,7 @@ export function ProductJourney({
                         {entry.haConcentration}
                       </dd>
                     </div>
-                    <div className="border-b border-catalog-gray py-3 ps-6">
+                    <div className="border-b border-catalog-gray py-2 ps-6 lg:py-3">
                       <dt
                         className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
                         data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-duration"
@@ -240,47 +240,80 @@ export function ProductJourney({
         </div>
       </div>
 
+      {/* Arrow + progress control. Physical left-to-right layout (not RTL reading
+          order): the right-hand arrow always advances Fine Lines → Sub Skin,
+          matching the box row's left-to-right order — see ArrowButton below. */}
       <div className="flex items-center justify-center gap-5">
-        <ArrowButton direction="prev" onClick={goPrev} disabled={activeIndex === 0} />
-        <div className="h-1 w-40 overflow-hidden rounded-full bg-catalog-gray">
+        <ArrowButton side="right" onClick={goNext} disabled={activeIndex === N - 1} label="המוצר הבא" />
+        <div className="h-1.5 w-40 overflow-hidden rounded-full bg-catalog-gray shadow-[0_2px_10px_-2px_rgba(26,20,20,0.2)]">
           <motion.div
             className="h-full rounded-full"
-            style={{ transformOrigin: "right", background: "var(--color-wine)" }}
+            style={{ transformOrigin: "left", background: "var(--color-wine)" }}
+            initial={false}
             animate={{ scaleX: Math.max(0.03, activeIndex / (N - 1)) }}
             transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
           />
         </div>
-        <ArrowButton direction="next" onClick={goNext} disabled={activeIndex === N - 1} />
+        <ArrowButton side="left" onClick={goPrev} disabled={activeIndex === 0} label="המוצר הקודם" />
       </div>
     </section>
   );
 }
 
 function ArrowButton({
-  direction,
+  side,
   onClick,
   disabled,
+  label,
 }: {
-  direction: "prev" | "next";
+  /** Physical screen side this button renders on — the icon and its forward/back
+   * meaning are locked to physical left/right, not RTL reading order. In an RTL
+   * flex row the first DOM child renders rightmost, so `side="right"` must be the
+   * first ArrowButton in JSX and `side="left"` the last. */
+  side: "left" | "right";
   onClick: () => void;
   disabled: boolean;
+  label: string;
 }) {
-  // RTL: "previous" (toward the start of the sequence) points right, "next" points left.
-  const Icon = direction === "prev" ? ChevronRight : ChevronLeft;
+  const Icon = side === "right" ? ChevronRight : ChevronLeft;
+  // Nudge direction matches the chevron's own point, not the semantic
+  // forward/back meaning — reads as "the icon leans the way it's pointing."
+  const nudge = side === "right" ? 3 : -3;
+
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-label={direction === "prev" ? "המוצר הקודם" : "המוצר הבא"}
+      aria-label={label}
+      initial="rest"
+      whileHover={disabled ? undefined : "hover"}
+      whileTap={disabled ? undefined : { scale: 0.94 }}
       className={cn(
-        "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-[color,border-color,opacity] duration-200",
+        "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 shadow-[0_8px_20px_-10px_rgba(26,20,20,0.35)] transition-[color,background-color,border-color,opacity] duration-200",
         disabled
-          ? "cursor-default border-ink/10 text-ink/20"
-          : "border-ink/25 text-ink hover:border-wine hover:text-wine active:scale-[0.97]",
+          ? "cursor-default border-ink/10 text-ink/20 shadow-none"
+          : "border-wine/25 bg-cream text-wine hover:border-wine hover:bg-wine hover:text-cream",
       )}
     >
-      <Icon className="h-5 w-5" aria-hidden />
-    </button>
+      {/* Soft ambient glow bloom on hover — echoes the treatment markers' own
+          halo directly above this control, so the arrows read as part of the
+          same interactive vocabulary rather than a one-off hover effect. */}
+      {!disabled && (
+        <motion.span
+          aria-hidden
+          className="absolute inset-0 -z-10 rounded-full bg-wine blur-md"
+          variants={{ rest: { opacity: 0, scale: 0.8 }, hover: { opacity: 0.3, scale: 1.3 } }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        />
+      )}
+      <motion.span
+        className="flex"
+        variants={{ rest: { x: 0 }, hover: { x: nudge } }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Icon className="h-6 w-6" aria-hidden />
+      </motion.span>
+    </motion.button>
   );
 }

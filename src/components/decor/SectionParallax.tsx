@@ -16,10 +16,9 @@ import {
 } from "framer-motion";
 
 /**
- * Scroll-linked depth parallax for a single full-viewport section — distinct from
- * HeroParallax's mouse-driven layers. Each layer moves by a different pixel range
- * as the section transits the viewport, so background/image/text read as physically
- * separated depths rather than a shared drift.
+ * Scroll-linked depth parallax for a single full-viewport section. Each layer moves
+ * by a different pixel range as the section transits the viewport, so background/
+ * image/text read as physically separated depths rather than a shared drift.
  *
  * Desktop-only (matches the existing lg-only enhancement pattern used for the
  * showcase progress rail and other decor) and off under prefers-reduced-motion —

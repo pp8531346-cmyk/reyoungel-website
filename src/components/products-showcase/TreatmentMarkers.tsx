@@ -28,6 +28,9 @@ export function TreatmentMarkers({
 
   function handleEditMouseDown(e: React.MouseEvent, i: number) {
     if (!editMode || !productCode) return;
+    // Mousedown on the hover-label itself is a text edit (handled by the generic
+    // dev-editor overlay via data-edit-id) — only the dot/glow drags the marker.
+    if ((e.target as HTMLElement).closest("[data-marker-tooltip]")) return;
     e.preventDefault();
     e.stopPropagation();
     const container = containerRef.current;
@@ -52,7 +55,7 @@ export function TreatmentMarkers({
       fetch("/api/dev-editor/save-marker", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: productCode, label: localMarkers[i].label, x, y }),
+        body: JSON.stringify({ code: productCode, id: localMarkers[i].id, x, y }),
       });
     }
 
@@ -64,7 +67,7 @@ export function TreatmentMarkers({
     <div ref={containerRef} className="absolute inset-0" aria-hidden={false}>
       {localMarkers.map((marker, i) => (
         <motion.div
-          key={marker.label}
+          key={marker.id}
           className="absolute"
           style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
           initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, filter: "blur(6px)" }}
@@ -122,14 +125,20 @@ export function TreatmentMarkers({
             />
 
             <AnimatePresence>
-              {active === i && (
+              {(active === i || editMode) && (
                 <motion.span
+                  data-marker-tooltip="true"
+                  data-edit-id={
+                    productCode
+                      ? `src/lib/productShowcaseContent.ts#showcaseEntries-${productCode}-markers-${marker.id}-label`
+                      : undefined
+                  }
                   initial={{ opacity: 0, y: 5, scale: 0.94, filter: "blur(2px)" }}
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: 5, scale: 0.94, filter: "blur(2px)" }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ background: accent }}
-                  className="pointer-events-none absolute bottom-full left-1/2 mb-3 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold text-cream shadow-[0_8px_20px_-6px_rgba(26,20,20,0.45)]"
+                  style={{ background: accent, pointerEvents: editMode ? "auto" : "none" }}
+                  className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold text-cream shadow-[0_8px_20px_-6px_rgba(26,20,20,0.45)]"
                 >
                   {marker.label}
                 </motion.span>

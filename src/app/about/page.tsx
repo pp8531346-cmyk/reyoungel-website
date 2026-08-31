@@ -6,24 +6,25 @@ import { PageHero } from "@/components/layout/PageHero";
 import { CertificationShowcase } from "@/components/sections/CertificationShowcase";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const metadata: Metadata = {
   title: "אודות",
   description:
-    "Bioha Laboratories — בית המעבדה הבריטי מאחורי Reyoungel®, מאז 2003. ניסיון מדעי בינלאומי, נוכחות ביותר מ-70 מדינות, אישור משרד הבריאות ותו תקן CE.",
+    "Bioha Laboratories — בית המעבדה הבריטי מאחורי Reyoungel, מאז 2003. ניסיון מדעי בינלאומי, נוכחות ביותר מ-70 מדינות, אישור משרד הבריאות ותו תקן CE.",
 };
 
 const milestones = [
   {
     value: /* @edit:milestones-0-value */ "2003",
-    label: /* @edit:milestones-0-label */ "שנת הקמת בית המעבדה בבריטניה",
+    label: /* @edit:milestones-0-label */ "שנת הקמת בית המעבדה",
   },
   {
     value: /* @edit:milestones-1-value */ "70+",
-    label: /* @edit:milestones-1-label */ "מדינות ברחבי העולם בהן נמכרים מוצרי Reyoungel®",
+    label: /* @edit:milestones-1-label */ "מדינות ברחבי העולם בהן נמכרים מוצרי Reyoungel",
   },
   {
-    value: /* @edit:milestones-2-value */ "1,000,000+",
+    value: /* @edit:milestones-2-value */ "10,000,000+",
     label: /* @edit:milestones-2-label */ "קופסאות מוצר שנמכרו עד היום",
   },
 ];
@@ -35,7 +36,11 @@ export default function AboutPage() {
       <main>
         <PageHero
           eyebrow="אודות Bioha Laboratories"
-          title="המעבדה שמאחורי Reyoungel®"
+          title={
+            <>
+              המעבדה שמאחורי <BrandLogo variant="white" />
+            </>
+          }
           eyebrowEditId="src/app/about/page.tsx#hero-eyebrow"
           titleEditId="src/app/about/page.tsx#hero-title"
           descriptionEditId="src/app/about/page.tsx#hero-description"
@@ -67,19 +72,17 @@ export default function AboutPage() {
                 data-edit-id="src/app/about/page.tsx#s1-headline"
               >
                 {/* @edit:s1-headline */}
-                עשרים שנות התמחות, צוות מדעי בין-לאומי
+                עשרים שנות התמחות ומקצועיות
               </h2>
               <p className="max-w-xl text-base leading-relaxed text-stone lg:text-lg">
                 <span data-edit-id="src/app/about/page.tsx#s1-p1-lead">
                   {/* @edit:s1-p1-lead */}
                   טכנולוגיית{" "}
                 </span>
-                <span className="font-bold text-wine">SAX-HA®</span>
+                <span className="font-bold text-wine">SAX-HA</span>{" "}
                 <span data-edit-id="src/app/about/page.tsx#s1-p1-tail">
                   {/* @edit:s1-p1-tail */}
-                  {" "}הפטנטית שמאחורי Reyoungel® פותחה על ידי צוות מדענים ומהנדסים
-                  המתמחים במכשור רפואי להזרקת ביופולימרים, עם ניסיון מצטבר של
-                  למעלה מ-20 שנה משווייץ ומצרפת.
+                  הפטנטית שמאחורי Reyoungel פותחה על ידי צוות מדענים ומהנדסים המתמחים במכשור רפואי וטכנולוגיית הזרקה מתקדמות, עם ניסיון מצטבר של למעלה מ-20 שנה.
                 </span>
               </p>
               <p
@@ -87,21 +90,28 @@ export default function AboutPage() {
                 data-edit-id="src/app/about/page.tsx#s1-p2"
               >
                 {/* @edit:s1-p2 */}
-                מאז הקמת Bioha Laboratories ב-2003, מיליוני קופסאות של מוצרי
-                Reyoungel® נמכרו ביותר מ-70 מדינות ברחבי העולם — תוך מתן חוויה
-                אסתטית בטוחה, יעילה ואלגנטית ללקוחותינו.
+                מאז הקמת Bioha Laboratories ב-2003, מיליוני קופסאות של מוצרי Reyoungel נמכרו ביותר מ-70 מדינות ברחבי העולם תוך מתן חוויה אסתטית בטוחה, יעילה ואלגנטית ללקוחותינו.
               </p>
             </Reveal>
 
-            <Reveal delay={150} className="w-full max-w-sm lg:col-span-5 lg:max-w-none">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-tr-[3rem] rounded-bl-[3rem] border border-hairline">
+            <Reveal
+              delay={150}
+              className="flex w-full max-w-sm justify-center lg:col-span-5 lg:max-w-none lg:justify-start"
+            >
+              {/* Same natural-ratio sizing as the Technology page's s1-image, so the two
+                  pages are visually consistent — full photo always visible, never
+                  side-cropped, capped by max-h-[80vh] so it never grows taller than the
+                  viewport (roughly 100vh minus the fixed navbar) on any screen, and by
+                  max-w-full so it never overflows its column on mobile. width/height below
+                  are the actual file's intrinsic pixel dimensions. */}
+              <div className="relative overflow-hidden rounded-tr-[3rem] rounded-bl-[3rem] border border-hairline">
                 <Image
-                  src="/images/1-1786222290536.png"
+                  src="/images/4-1787154992521.png"
                   alt=""
-                  fill
-                  sizes="(min-width: 1024px) 24rem, 80vw"
-                  className="object-cover"
-                  style={{ objectPosition: "30% 65%" }}
+                  width={1080}
+                  height={1350}
+                  sizes="(min-width: 1024px) 32rem, 80vw"
+                  className="h-auto max-h-[80vh] w-full max-w-full object-contain"
                   data-edit-id="src/app/about/page.tsx#s1-image"
                 />
               </div>
@@ -116,7 +126,7 @@ export default function AboutPage() {
               data-edit-id="src/app/about/page.tsx#s2-headline"
             >
               {/* @edit:s2-headline */}
-              מבית מעבדה בבריטניה, לעולם כולו
+              
             </h2>
           </Reveal>
 
@@ -159,18 +169,14 @@ export default function AboutPage() {
               data-edit-id="src/app/about/page.tsx#s3-headline"
             >
               {/* @edit:s3-headline */}
-              מעבדה המתמחה במכשור רפואי אסתטי
+              
             </h2>
             <p
               className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
               data-edit-id="src/app/about/page.tsx#s3-p1"
             >
               {/* @edit:s3-p1 */}
-              Bioha Laboratories היא חברת האם של Reyoungel®, ומתמחה בפיתוח
-              מוצרים רפואיים ואסתטיים — ממילויים היאלורוניים ועד חוטי PDO
-              וטיפולי מזותרפיה. הליבה שלנו, Reyoungel®, מתמקדת אך ורק
-              במילויים היאלורוניים משוזרים: ג&rsquo;ל טבעי, ביודגרדבילי,
-              נטול מקור מן החי, בעל מרקם צלול וחסר צבע.
+              
             </p>
           </Reveal>
         </section>

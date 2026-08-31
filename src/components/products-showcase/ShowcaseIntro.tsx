@@ -5,8 +5,20 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { showcaseIntro, heroBoxes } from "@/lib/productShowcaseContent";
 import { products } from "@/lib/data";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
-export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: number) => void }) {
+export function ShowcaseIntro({
+  onSelectProduct,
+  sectionRef,
+}: {
+  onSelectProduct: (index: number) => void;
+  /** Forwarded to the box-row element itself (not the whole hero section) purely so
+   * ProductsExperience can tell when the row has scrolled out of view, for the
+   * floating badge below — tracking the full section instead would only flip once
+   * all the surrounding headline/scroll-hint space clears too, well after the row
+   * itself is already gone. */
+  sectionRef?: React.Ref<HTMLDivElement>;
+}) {
   const shouldReduceMotion = useReducedMotion();
   const rise = (delay: number) => ({
     initial: shouldReduceMotion ? undefined : { opacity: 0, y: 16 },
@@ -21,6 +33,7 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
         className="text-xs font-bold tracking-[0.3em] text-stone"
         data-edit-id="src/lib/productShowcaseContent.ts#showcaseIntro-eyebrow"
       >
+        {/* @edit:showcaseIntro-eyebrow */}
         {showcaseIntro.eyebrow}
       </motion.p>
 
@@ -29,10 +42,10 @@ export function ShowcaseIntro({ onSelectProduct }: { onSelectProduct: (index: nu
         className="max-w-3xl text-balance font-display text-[clamp(1.5rem,3.4vw,2.75rem)] font-black leading-[1.15] text-ink"
         data-edit-id="src/lib/productShowcaseContent.ts#showcaseIntro-headline"
       >
-        {showcaseIntro.headline}
+        {showcaseIntro.headline} <BrandLogo variant="ink" />
       </motion.h1>
 
-      <motion.div {...rise(0.25)} className="relative mx-auto w-full max-w-[90vw]">
+      <motion.div ref={sectionRef} {...rise(0.25)} className="relative mx-auto w-full max-w-[90vw]">
         <div
           aria-hidden
           className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle,var(--color-plum)_0%,transparent_70%)] opacity-[0.06] blur-3xl"

@@ -1,30 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ComplianceBar } from "@/components/layout/ComplianceBar";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
-// Inert data — just saved x/y offsets from the dev editor's drag-to-reposition.
-// Empty by default, so this has zero visual effect until something is dragged and saved.
+// Inert data — just saved x/y offsets (and, for images, scale) from the dev editor's
+// drag-to-reposition / drag-to-resize. Empty by default, so this has zero visual effect
+// until something is dragged and saved. Read directly here (rather than relying on the
+// dev-editor overlay's own reapply effect) so the saved value is real production styling
+// for every visitor, not just a dev-mode preview — the overlay itself never ships to
+// production at all (see DevEditorGate).
 import devPositions from "@/dev-editor/positions.json";
+import devSizes from "@/dev-editor/sizes.json";
 
 const logoOffset = (devPositions as Record<string, { x: number; y: number }>)["navbar-logo"] ?? {
   x: 0,
   y: 0,
 };
+const logoOffsetMobile = (devPositions as Record<string, { x: number; y: number }>)[
+  "navbar-logo-mobile"
+] ?? { x: 0, y: 0 };
+const logoScaleMobile =
+  (devSizes as Record<string, { kind: string; scale: number }>)[
+    "src/components/layout/Navbar.tsx#navbar-logo-mobile-img"
+  ]?.scale ?? 1;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Publishes the flat bar's real height (compliance strip + logo/nav row) as
+  // --navbar-h so decor layers glued to the navbar's bottom edge (HeaderWave)
+  // stay aligned even when the compliance strip wraps to two lines on narrow
+  // mobile widths. Measures only this wrapper, not the conditional mobile
+  // dropdown below it, since that overlay expanding shouldn't shift the wave.
+  useLayoutEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+    const update = () => {
+      document.documentElement.style.setProperty("--navbar-h", `${el.offsetHeight}px`);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
@@ -52,12 +82,37 @@ export function Navbar() {
           : "linear-gradient(to left, var(--color-wine) 0%, color-mix(in srgb, var(--color-wine), white 12%) 100%)",
       }}
     >
-      <ComplianceBar />
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1 lg:px-10">
-        {/* Invisible placeholder — preserves the logo's original width in the flex layout so
-            nav links / contact button keep their normal position; the real, enlarged logo is
-            rendered separately below as an absolutely-positioned element. */}
-        <span aria-hidden className="block h-px w-[85px] shrink-0" />
+      <div ref={barRef}>
+        <ComplianceBar />
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1 lg:px-10">
+        {/* Mobile: a real, compact logo sitting in-flow in this row, next to the hamburger —
+            the desktop treatment (large, absolutely-positioned, bleeding down over the wave)
+            doesn't translate to mobile, where the compliance bar wraps to two lines and there's
+            no headroom for a large overlay logo without either overlapping that text or
+            spilling past the flat bar into the hero band below. Desktop: collapses to an
+            invisible 1px placeholder (pointer-events-none, so it's also inert as a dev-editor
+            drag/resize target there) that only reserves the enlarged logo's width in this flex
+            row so the nav links / contact button keep their centered position — the real
+            desktop logo is the separate absolutely-positioned element further down.
+            Draggable + resizable in dev mode like the desktop logo below: data-dev-positionable
+            makes the Link itself drag-to-reposition (saved under "navbar-logo-mobile", applied
+            above as a base translate independent of the desktop logo's own offset); the img's
+            data-edit-id gives it the same corner resize handle every dev-editor image gets,
+            saved to sizes.json and applied above as a base scale. */}
+        <Link
+          href="/"
+          aria-label="Reyoungel — עמוד הבית"
+          onClick={() => setOpen(false)}
+          data-dev-positionable="navbar-logo-mobile"
+          className="flex h-8 w-[85px] shrink-0 items-center justify-end lg:pointer-events-none lg:h-px"
+          style={{ transform: `translate(${logoOffsetMobile.x}px, ${logoOffsetMobile.y}px)` }}
+        >
+          <Logo
+            imgClassName="h-8 w-auto object-contain lg:hidden"
+            imgStyle={{ transform: `scale(${logoScaleMobile})` }}
+            data-edit-id="src/components/layout/Navbar.tsx#navbar-logo-mobile-img"
+          />
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link, i) => (
@@ -91,6 +146,7 @@ export function Navbar() {
         >
           {open ? <X size={26} /> : <Menu size={26} />}
         </button>
+        </div>
       </div>
 
       {open && (
@@ -121,13 +177,14 @@ export function Navbar() {
         </nav>
       )}
 
-      {/* Enlarged logo — spans the flat bar and bleeds down over the wave, staying within the red area */}
+      {/* Enlarged logo — desktop only. Spans the flat bar and bleeds down over the wave,
+          staying within the red area; mobile has its own compact in-flow logo above instead. */}
       <Link
         href="/"
         aria-label="Reyoungel — עמוד הבית"
         onClick={() => setOpen(false)}
         data-dev-positionable="navbar-logo"
-        className="absolute right-6 top-1 z-10 lg:right-10"
+        className="absolute right-10 top-1 z-10 hidden lg:block"
         style={{ transform: `translate(${logoOffset.x}px, ${logoOffset.y}px)` }}
       >
         <Logo

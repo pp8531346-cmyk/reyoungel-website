@@ -7,11 +7,12 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { Reveal } from "@/components/ui/Reveal";
 import { EnzymolysisChart } from "@/components/decor/EnzymolysisChart";
 import { SectionCurve } from "@/components/decor/SectionCurve";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const metadata: Metadata = {
   title: "טכנולוגיה",
   description:
-    "טכנולוגיית SAX-HA® הפטנטית של Reyoungel® (פטנט מס' ZL 2012 1 0372786.0) — שזירה נקייה יותר, פחות תגובות לוואי, ותוצאה יציבה לאורך זמן.",
+    "טכנולוגיית SAX-HA הפטנטית של Reyoungel (פטנט מס' ZL 2012 1 0372786.0) — שזירה נקייה יותר, פחות תגובות לוואי, ותוצאה יציבה לאורך זמן.",
 };
 
 export default function TechnologyPage() {
@@ -21,15 +22,19 @@ export default function TechnologyPage() {
       <main>
         <PageHero
           eyebrow="הטכנולוגיה שלנו"
-          title="SAX-HA® — הטכנולוגיה הפטנטית שלנו"
+          title="SAX-HA - הטכנולוגיה הייחודית שלנו"
           eyebrowEditId="src/app/technology/page.tsx#hero-eyebrow"
           titleEditId="src/app/technology/page.tsx#hero-title"
-          descriptionEditId="src/app/technology/page.tsx#hero-description"
         >
-          {/* @edit:hero-description */}
-          טכנולוגיית השזירה הפטנטית שמאחורי Reyoungel® (פטנט מס&rsquo; ZL 2012 1
-          0372786.0) מסלקת שיעור גבוה יותר של שאריות שזירה מהג&rsquo;ל, לתוצאה
-          נקייה ויציבה יותר קלינית.
+          <span data-edit-id="src/app/technology/page.tsx#hero-description-lead">
+            {/* @edit:hero-description-lead */}
+            טכנולוגיית ההצלבה הפטנטית שמאחורי 
+          </span>
+          <BrandLogo variant="white" />
+          <span data-edit-id="src/app/technology/page.tsx#hero-description-tail">
+            {/* @edit:hero-description-tail */}
+                 מסלקת שיעור גבוה יותר של שאריות BDDE מהג’ל, ומביאה לתוצאה נקייה ויציבה יותר קלינית.
+          </span>
         </PageHero>
 
         <section className="bg-ivory px-6 py-20 lg:px-10 lg:py-28">
@@ -43,38 +48,35 @@ export default function TechnologyPage() {
                 data-edit-id="src/app/technology/page.tsx#s1-eyebrow"
               >
                 {/* @edit:s1-eyebrow */}
-                כימיה שעושה הבדל
+                
               </p>
               <h2
                 className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
                 data-edit-id="src/app/technology/page.tsx#s1-headline"
               >
                 {/* @edit:s1-headline */}
-                טיהור מתקדם, ניקיון גבוה יותר, ביצועים יציבים יותר
+                ניקיון גבוה יותר- ביצועים יציבים יותר
               </h2>
               <p
                 className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
                 data-edit-id="src/app/technology/page.tsx#s1-p1"
               >
                 {/* @edit:s1-p1 */}
-                כל ג’ל המבוסס על חומצה היאלורונית עובר תהליך שזירה (Cross-Linking), שנועד לייצב את שרשראות החומצה ההיאלורונית ולהאריך את עמידות הג’ל ברקמה. במהלך תהליך זה נעשה שימוש בחומר השזירה BDDE, ולכן איכות תהליך הטיהור שלאחר השזירה מהווה שלב מרכזי בקביעת איכות המוצר הסופי.
+                כל ג’ל המבוסס על חומצה היאלורונית עובר תהליך הצלבה (Cross-Linking), שנועד לייצב את שרשראות החומצה ההיאלורונית ולהאריך את עמידות הג’ל ברקמה. במהלך תהליך זה נעשה שימוש בחומר השזירה BDDE, ולכן איכות תהליך הטיהור שלאחר השזירה מהווה שלב מרכזי בקביעת איכות המוצר הסופי.
               </p>
               <p className="max-w-xl text-base leading-relaxed text-stone lg:text-lg">
                 <span data-edit-id="src/app/technology/page.tsx#s1-p1b-lead">
                   {/* @edit:s1-p1b-lead */}
                   טכנולוגיית{" "}
                 </span>
-                <span className="font-bold text-wine">SAX-HA®</span>
+                <span className="font-bold text-wine">SAX-HA</span>{" "}
                 <span data-edit-id="src/app/technology/page.tsx#s1-p1b-mid">
                   {/* @edit:s1-p1b-mid */}
-                  {" "}הפטנטית שלנו (פטנט מס&rsquo; ZL 2012 1 0372786.0) פותחה כדי
-                  לפתור בדיוק את זה: תהליך טיהור מתקדם שמעניק לג&rsquo;ל רמת
-                  ניקיון וטיהור גבוהה משמעותית משאריות ה-BDDE, לעומת שיטות
-                  שזירה סטנדרטיות —
+                  הפטנטית שלנו (פטנט מס’ ZL 2012 1 0372786.0) פותחה כדי לפתור בדיוק את זה: תהליך טיהור מתקדם שמעניק לג’ל רמת ניקיון וטיהור גבוהה משמעותית משאריות ה-BDDE, לעומת שיטות שזירה סטנדרטיות.
                 </span>
                 <span data-edit-id="src/app/technology/page.tsx#s1-p2">
                   {/* @edit:s1-p2 */}
-                  {" "}ג&rsquo;ל נקי יותר ופחות תגובות לוואי.
+                   מעניק ג’ל נקי יותר ופחות תגובות לוואי.
                 </span>
               </p>
               <p
@@ -86,14 +88,27 @@ export default function TechnologyPage() {
               </p>
             </Reveal>
 
-            <Reveal delay={150} className="w-full max-w-sm lg:col-span-5 lg:max-w-none">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-tl-[3rem] rounded-br-[3rem] border border-hairline">
+            <Reveal
+              delay={150}
+              className="flex w-full max-w-sm justify-center lg:col-span-5 lg:max-w-none lg:justify-start"
+            >
+              {/* Natural-ratio sizing (not a fixed aspect-ratio + object-cover box) so the
+                  full photo is always visible, never side-cropped — width and height both
+                  scale down together, capped by max-h-[80vh] so the image never grows
+                  taller than the viewport (roughly 100vh minus the fixed navbar) on any
+                  screen, and by max-w-full so it never overflows its column on mobile.
+                  width/height below are the actual file's intrinsic pixel dimensions —
+                  keep them in sync if the source image is ever swapped, since a mismatch
+                  skews the reserved layout box's ratio (Next.js Image doesn't re-derive
+                  these from the file itself outside of `fill` mode). */}
+              <div className="relative overflow-hidden rounded-tl-[3rem] rounded-br-[3rem] border border-hairline">
                 <Image
-                  src="/images/5C3F908A-BD33-44B5-96CF-4714D1E3A76B-1786996879325.png"
+                  src="/images/4ea9567b-3f40-4cf7-81fb-247aa5cfc88a-1787555924639.jpg"
                   alt=""
-                  fill
-                  sizes="(min-width: 1024px) 24rem, 80vw"
-                  className="object-cover"
+                  width={895}
+                  height={989}
+                  sizes="(min-width: 1024px) 32rem, 80vw"
+                  className="h-auto max-h-[80vh] w-full max-w-full object-contain"
                   data-edit-id="src/app/technology/page.tsx#s1-image"
                 />
               </div>
@@ -104,18 +119,15 @@ export default function TechnologyPage() {
         {/* Design-audit fix #2: was a flat, un-rounded wine rectangle — the most
             literal "plain rectangle" wine block on the site. Bookended with the
             same organic SectionCurve wave already used at PageHero/CtaBand
-            boundaries instead of inventing a new shape primitive. Fix #4: the
-            quote itself drops to the one lighter weight loaded for Frank Ruhl
-            Libre (400) instead of the site's otherwise-universal 900 — the
-            single deliberately quiet typographic moment on the site. */}
+            boundaries instead of inventing a new shape primitive. */}
         <section className="grain relative overflow-hidden bg-wine px-6 py-24 text-center text-cream lg:py-32">
           <SectionCurve
             fill="var(--color-ivory)"
             className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 w-full -scale-y-100 lg:h-20"
           />
-          <Reveal className="relative z-20 mx-auto max-w-3xl">
+          <Reveal className="relative z-20 mx-auto max-w-3xl lg:max-w-4xl">
             <p
-              className="text-balance font-display text-3xl font-normal leading-tight lg:text-5xl"
+              className="text-balance font-display text-3xl font-black leading-tight lg:whitespace-nowrap lg:text-5xl"
               data-edit-id="src/app/technology/page.tsx#banner-text"
             >
               {/* @edit:banner-text */}
@@ -142,10 +154,7 @@ export default function TechnologyPage() {
               data-edit-id="src/app/technology/page.tsx#s3-p1"
             >
               {/* @edit:s3-p1 */}
-              במחקר הטרום-שיווקי, נבדק גם קצב הפירוק האנזימטי (hydrolysis)
-              של הג&rsquo;ל במבחנה (in-vitro) בהשוואה למותג מוביל באירופה.
-              קצב הפירוק הנמוך יותר של Reyoungel® מצביע על השפעה שנמשכת
-              זמן רב יותר בגוף.
+              במחקר הטרום-שיווקי, נבדק גם קצב הפירוק האנזימטי (hydrolysis) של הג’ל במבחנה (in-vitro) בהשוואה למותג מוביל באירופה. קצב הפירוק הנמוך יותר של Reyoungel מצביע על השפעה שנמשכת זמן רב יותר בגוף.
             </p>
           </Reveal>
 
@@ -164,7 +173,7 @@ export default function TechnologyPage() {
             </span>
             <span data-edit-id="src/app/technology/page.tsx#s3-p2-tail">
               {/* @edit:s3-p2-tail */}
-              {" "}בסין וברוסיה.
+              
             </span>
           </Reveal>
         </section>

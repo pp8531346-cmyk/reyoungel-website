@@ -7,12 +7,20 @@ export function AnimatedHeadline({
   lines,
   className,
   lineClassNames,
+  editFile,
+  editIdPrefix,
 }: {
   lines: string[][];
   className?: string;
   /** Optional per-line className (e.g. a different color per line), applied on
    * top of the shared `className` (font/size/weight) on the outer element. */
   lineClassNames?: string[];
+  /** Dev editor: when both are set, each word gets `data-edit-id="<editFile>#<editIdPrefix>-<line>-<word>"`.
+   * The caller must place a matching `/* @edit:<editIdPrefix>-<line>-<word> *\/` comment before the
+   * corresponding literal in its own `lines` array — the marker lives where the literal is defined,
+   * which is the caller's source, not this shared component's. */
+  editFile?: string;
+  editIdPrefix?: string;
 }) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -46,7 +54,12 @@ export function AnimatedHeadline({
           className={cn("block overflow-hidden whitespace-nowrap", lineClassNames?.[li])}
         >
           {line.map((w, wi) => (
-            <motion.span key={wi} variants={word} className="inline-block">
+            <motion.span
+              key={wi}
+              variants={word}
+              className="inline-block"
+              data-edit-id={editFile && editIdPrefix ? `${editFile}#${editIdPrefix}-${li}-${wi}` : undefined}
+            >
               {w}
               {wi < line.length - 1 ? " " : ""}
             </motion.span>

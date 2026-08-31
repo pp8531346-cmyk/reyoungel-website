@@ -3,6 +3,10 @@ import type { products } from "@/lib/data";
 type ProductCode = (typeof products)[number]["code"];
 
 export type TreatmentMarker = {
+  /** Stable identifier — the marker's persistence key for both position drags
+   * (save-marker) and label text edits (data-edit-id), so edits never depend on
+   * the mutable `label` text itself. */
+  id: string;
   label: string;
   /** Position as a percentage of the image box, front-facing portrait framing. */
   x: number;
@@ -28,8 +32,8 @@ export type ShowcaseEntry = {
 };
 
 export const showcaseIntro = {
-  eyebrow: "Reyoungel®",
-  headline: "סדרת המזרקים של ריונג׳ל",
+  eyebrow: /* @edit:showcaseIntro-eyebrow */ "Reyoungel",
+  headline: /* @edit:showcaseIntro-headline */ "סדרת המזרקים של",
   /** Virtual canvas the 5 box images below are positioned within — matches the
    * original hero photo's own dimensions so heroBoxes' rects (measured against
    * that photo) still line up exactly. */
@@ -71,79 +75,80 @@ export const showcaseEntries: ShowcaseEntry[] = [
   {
     code: "R001",
     description:
-      "ג׳ל היאלורוני עדין, המיועד לדרמיס השטחי — לריכוך קמטי הבעה ראשוניים תוך שמירה קפדנית על תנועתיות טבעית של הבעות הפנים.",
-    injectionDepth: "דרמיס שטחי",
-    structureLabel: "++++",
-    haConcentration: "20 מ״ג/מ״ל",
-    needleGauge: "30G",
+      /* @edit:showcaseEntries-R001-description */ "ג׳ל היאלורוני עדין, המיועד לדרמיס השטחי - לריכוך קמטי הבעה ראשוניים תוך שמירה קפדנית על תנועתיות טבעית של הבעות הפנים.",
+    injectionDepth: /* @edit:showcaseEntries-R001-injectionDepth */ "דרמיס שטחי",
+    structureLabel: /* @edit:showcaseEntries-R001-structureLabel */ "+",
+    haConcentration: /* @edit:showcaseEntries-R001-haConcentration */ "20 מ״ג/מ״ל",
+    needleGauge: /* @edit:showcaseEntries-R001-needleGauge */ "30G",
     accent: "var(--color-wine)",
     markers: [
-      { label: "שקעי עיניים", x: 39, y: 48.6 },
-      { label: "קמטים סביב העיניים", x: 50.6, y: 35.4 },
-      { label: "קמטים סביב הפה", x: 49.6, y: 60.4 },
+      { id: "eye-hollows", label: /* @edit:showcaseEntries-R001-markers-eye-hollows-label */ "שקעי עיניים", x: 39, y: 48.6 },
+      { id: "crows-feet", label: /* @edit:showcaseEntries-R001-markers-crows-feet-label */ "קמטים סביב העיניים", x: 74.5, y: 40.1 },
+      { id: "perioral-lines", label: /* @edit:showcaseEntries-R001-markers-perioral-lines-label */ "קמטים סביב הפה", x: 49.6, y: 60.4 },
+      { id: "forehead-lines", label: /* @edit:showcaseEntries-R001-markers-forehead-lines-label */ "גלאבלה", x: 50.6, y: 35.3 },
     ],
   },
   {
     code: "R002",
     description:
-      "פורמולציה מאוזנת לדרמיס הבינוני, מיועדת לקווי מתאר עדינים סביב אזור הפה והגלבלה — לתוצאה הרמונית שאינה פוגעת בטבעיות ההבעה.",
-    injectionDepth: "דרמיס בינוני/שטחי",
-    structureLabel: "+",
-    haConcentration: "20 מ״ג/מ״ל",
-    needleGauge: "30G",
+      /* @edit:showcaseEntries-R002-description */ "פורמולציה מאוזנת לדרמיס הבינוני, מיועדת לחידוד ועיצוב השפתיים - לתוצאה הרמונית שאינה פוגעת בטבעיות ההבעה.",
+    injectionDepth: /* @edit:showcaseEntries-R002-injectionDepth */ "דרמיס בינוני/שטחי",
+    structureLabel: /* @edit:showcaseEntries-R002-structureLabel */ "++",
+    haConcentration: /* @edit:showcaseEntries-R002-haConcentration */ "20 מ״ג/מ״ל",
+    needleGauge: /* @edit:showcaseEntries-R002-needleGauge */ "30G",
     accent: "var(--color-wine)",
     markers: [
-      { label: "גלבלה", x: 67.1, y: 67.4 },
-      { label: "אזור פריאורלי", x: 53.4, y: 59.4 },
-      { label: "שקעי עיניים", x: 64.3, y: 56.9 },
+      { id: "glabella", label: /* @edit:showcaseEntries-R002-markers-glabella-label */ "קפלי מריונטה קלים", x: 67.1, y: 67.4 },
+      { id: "perioral-area", label: /* @edit:showcaseEntries-R002-markers-perioral-area-label */ "אזור פריאורלי", x: 53.4, y: 59.4 },
+      { id: "eye-hollows", label: /* @edit:showcaseEntries-R002-markers-eye-hollows-label */ "קפלי נזולביאל קלים", x: 42.3, y: 57.4 },
     ],
   },
   {
     code: "R003",
     description:
-      "צמיגות בינונית–גבוהה המותאמת לנפח שפתיים ולתיקון קפל האף–שפה — משלבת תמיכה מבנית עם מרקם חלק המתאים לאזורים דינמיים בפנים.",
-    injectionDepth: "דרמיס בינוני - עמוק",
-    structureLabel: "++",
-    haConcentration: "20 מ״ג/מ״ל",
-    needleGauge: "27G",
+      /* @edit:showcaseEntries-R003-description */ "צמיגות בינונית–גבוהה המותאמת לנפח שפתיים ולתיקון קפל האף–שפה - משלבת תמיכה מבנית עם מרקם חלק המתאים לאזורים דינמיים בפנים.",
+    injectionDepth: /* @edit:showcaseEntries-R003-injectionDepth */ "דרמיס בינוני - עמוק",
+    structureLabel: /* @edit:showcaseEntries-R003-structureLabel */ "++",
+    haConcentration: /* @edit:showcaseEntries-R003-haConcentration */ "20 מ״ג/מ״ל",
+    needleGauge: /* @edit:showcaseEntries-R003-needleGauge */ "27G",
     accent: "var(--color-plum)",
     markers: [
-      { label: "שפתיים", x: 53.7, y: 62.1 },
-      { label: "קמטי מריונטה", x: 67.4, y: 67.4 },
-      { label: "קפלים נזוליאביאליים", x: 64.9, y: 56.9 },
-      { label: "לחיים", x: 72.8, y: 53.9 },
+      { id: "lips", label: /* @edit:showcaseEntries-R003-markers-lips-label */ "שפתיים", x: 53.7, y: 62.1 },
+      { id: "marionette-lines", label: /* @edit:showcaseEntries-R003-markers-marionette-lines-label */ "קמטי מריונטה", x: 67.4, y: 67.4 },
+      { id: "nasolabial-folds", label: /* @edit:showcaseEntries-R003-markers-nasolabial-folds-label */ "קפלים נזוליאביאליים", x: 64.9, y: 56.9 },
+      { id: "cheeks", label: /* @edit:showcaseEntries-R003-markers-cheeks-label */ "נפח ללחיים", x: 72.8, y: 53.9 },
     ],
   },
   {
     code: "R004",
     description:
-      "ג׳ל בעל מבנה יציב לדרמיס העמוק, לעיצוב עצמות הלחי, קו הלסת והסנטר — מיועד לשחזור נפח משמעותי עם תמיכה מבנית ארוכת טווח.",
-    injectionDepth: "דרמיס עמוק",
-    structureLabel: "++++",
-    haConcentration: "20 מ״ג/מ״ל",
-    needleGauge: "23G",
+      /* @edit:showcaseEntries-R004-description */ "ג׳ל בעל מבנה יציב לדרמיס העמוק, לעיצוב עצמות הלחי, קו הלסת והסנטר - מיועד לשחזור נפח משמעותי עם תמיכה מבנית ארוכת טווח.",
+    injectionDepth: /* @edit:showcaseEntries-R004-injectionDepth */ "דרמיס עמוק",
+    structureLabel: /* @edit:showcaseEntries-R004-structureLabel */ "++++",
+    haConcentration: /* @edit:showcaseEntries-R004-haConcentration */ "20 מ״ג/מ״ל",
+    needleGauge: /* @edit:showcaseEntries-R004-needleGauge */ "23G",
     accent: "var(--color-plum)",
     markers: [
-      { label: "קו לסת", x: 54.6, y: 72.6 },
-      { label: "סנטר", x: 74.6, y: 65.4 },
-      { label: "עצמות לחיים", x: 73.7, y: 50.4 },
-      { label: "נפח ללחיים", x: 51.8, y: 47.6 },
+      { id: "jawline", label: /* @edit:showcaseEntries-R004-markers-jawline-label */ "קו לסת", x: 77.5, y: 63.8 },
+      { id: "chin", label: /* @edit:showcaseEntries-R004-markers-chin-label */ "סנטר", x: 55.6, y: 74.9 },
+      { id: "cheekbones", label: /* @edit:showcaseEntries-R004-markers-cheekbones-label */ "עצמות לחיים", x: 75.5, y: 47.5 },
+      { id: "cheek-volume", label: /* @edit:showcaseEntries-R004-markers-cheek-volume-label */ "אף", x: 51.8, y: 47.6 },
     ],
   },
   {
     code: "R005",
     description:
-      "הצמיגות הגבוהה ביותר בסדרה, לדרמיס העמוק ולרקמה התת–עורית — מיועדת לעיצוב קונטור הפנים והגוף ולשחזור נפח מבני משמעותי.",
-    injectionDepth: "דרמיס עמוק, תת עורי",
-    structureLabel: "++++",
-    haConcentration: "20 מ״ג/מ״ל",
-    needleGauge: "23G",
+      /* @edit:showcaseEntries-R005-description */ "הצמיגות הגבוהה ביותר בסדרה, לדרמיס העמוק ולרקמה התת–עורית — מיועדת לעיצוב קונטור הפנים והגוף ולשחזור נפח מבני משמעותי.",
+    injectionDepth: /* @edit:showcaseEntries-R005-injectionDepth */ "דרמיס עמוק, תת עורי",
+    structureLabel: /* @edit:showcaseEntries-R005-structureLabel */ "+++++",
+    haConcentration: /* @edit:showcaseEntries-R005-haConcentration */ "20 מ״ג/מ״ל",
+    needleGauge: /* @edit:showcaseEntries-R005-needleGauge */ "23G",
     accent: "var(--color-wine-dark)",
     markers: [
-      { label: "קו לסת", x: 74, y: 65 },
-      { label: "סנטר", x: 54.6, y: 74.4 },
-      { label: "עצמות לחיים", x: 75.9, y: 49.6 },
-      { label: "אף", x: 52.4, y: 47.9 },
+      { id: "jawline", label: /* @edit:showcaseEntries-R005-markers-jawline-label */ "קו לסת", x: 74, y: 65 },
+      { id: "chin", label: /* @edit:showcaseEntries-R005-markers-chin-label */ "סנטר", x: 54.6, y: 74.4 },
+      { id: "cheekbones", label: /* @edit:showcaseEntries-R005-markers-cheekbones-label */ "עצמות לחיים", x: 75.9, y: 49.6 },
+      { id: "nose", label: /* @edit:showcaseEntries-R005-markers-nose-label */ "אף", x: 52.4, y: 47.9 },
     ],
   },
 ];

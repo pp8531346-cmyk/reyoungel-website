@@ -18,6 +18,15 @@
 
   --font-display: var(--font-frank-ruhl);
   --font-body: var(--font-assistant);
+
+  /* Real height of the fixed navbar's flat bar (compliance strip + logo/nav row),
+   * kept in sync by Navbar via ResizeObserver. Decor layers that must sit flush
+   * against the navbar's bottom edge (HeaderWave) read this instead of a hardcoded
+   * pixel value, since the compliance strip wraps to two lines on narrow mobile
+   * widths and grows the navbar taller than its single-line desktop height. This
+   * default matches the single-line desktop height for the first paint before JS
+   * measures the real value. */
+  --navbar-h: 74.5px;
 }
 
 @theme inline {

@@ -27,9 +27,11 @@ const variants = {
     "bg-cream text-wine hover:bg-ivory border border-cream hover:border-ivory",
   "outline-on-wine":
     "bg-transparent text-cream border border-cream/40 hover:border-cream hover:bg-cream/10",
-  // Hero-only: primary with a soft wine glow on hover.
+  // Hero-only: primary with a soft wine glow on hover — set via --hover-shadow
+  // so it plugs into the shared .hover-lift-btn rule instead of fighting it
+  // for the box-shadow property.
   "primary-glow":
-    "bg-wine text-cream border border-wine hover:bg-wine-dark hover:border-wine-dark hover:shadow-[0_0_28px_rgba(171,33,58,0.45)]",
+    "bg-wine text-cream border border-wine hover:bg-wine-dark hover:border-wine-dark [--hover-shadow:0_0_28px_rgba(171,33,58,0.45)]",
   // Hero-only: glass-style secondary. The brief called for a cream/white border, but the
   // hero's actual background is light ivory, not dark — a cream border there would have
   // almost no contrast, so this uses an ink-tinted hairline instead for visibility.
@@ -69,7 +71,7 @@ export function Button({ href, children, variant = "primary", className }: Butto
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className={cn(
-          "inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-[color,background-color,border-color,box-shadow] duration-200 active:scale-[0.97]",
+          "hover-lift-btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-[color,background-color,border-color] duration-200 active:scale-[0.97]",
           variants[variant],
           className,
         )}

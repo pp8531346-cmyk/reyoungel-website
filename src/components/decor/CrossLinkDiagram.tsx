@@ -112,7 +112,7 @@ export function CrossLinkDiagram({
           data-edit-id="src/components/decor/CrossLinkDiagram.tsx#label-saxha"
         >
           {/* @edit:label-saxha */}
-          SAX-HA®
+          SAX-HA
         </span>
       </div>
     </div>

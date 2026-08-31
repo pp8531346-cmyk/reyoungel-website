@@ -4,11 +4,12 @@ import { Footer } from "@/components/layout/Footer";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Reveal } from "@/components/ui/Reveal";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const metadata: Metadata = {
   title: "צור קשר",
   description:
-    "לרופאים, קליניקות ומרכזי רפואה אסתטית המעוניינים לשלב את Reyoungel® בפרקטיקה שלהם — צרו קשר עם הצוות המקצועי שלנו.",
+    "לרופאים, קליניקות ומרכזי רפואה אסתטית המעוניינים לשלב את Reyoungel בפרקטיקה שלהם — צרו קשר עם הצוות המקצועי שלנו.",
 };
 
 export default function ContactPage() {
@@ -21,11 +22,16 @@ export default function ContactPage() {
           title="בואו נדבר על שיתוף פעולה מקצועי"
           eyebrowEditId="src/app/contact/page.tsx#hero-eyebrow"
           titleEditId="src/app/contact/page.tsx#hero-title"
-          descriptionEditId="src/app/contact/page.tsx#hero-description"
         >
-          {/* @edit:hero-description */}
-          לרופאים, קליניקות ומרכזי רפואה אסתטית המעוניינים לשלב את Reyoungel®
-          בפרקטיקה שלהם — נשמח לשמוע מכם ולספק את כל המידע המקצועי הנדרש.
+          <span data-edit-id="src/app/contact/page.tsx#hero-description-lead">
+            {/* @edit:hero-description-lead */}
+            לרופאים, קליניקות ומרכזי רפואה אסתטית המעוניינים לשלב את{" "}
+          </span>
+          <BrandLogo variant="white" />
+          <span data-edit-id="src/app/contact/page.tsx#hero-description-tail">
+            {/* @edit:hero-description-tail */}
+            {" "}בפרקטיקה שלהם — נשמח לשמוע מכם ולספק את כל המידע המקצועי הנדרש.
+          </span>
         </PageHero>
 
         <section className="bg-ivory px-6 py-20 lg:px-10 lg:py-28">

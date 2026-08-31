@@ -58,12 +58,34 @@ function HeroRail() {
   );
 }
 
-function ValueChecklist({ className }: { className?: string }) {
+function ValueChecklist({
+  className,
+  variant = "default",
+}: {
+  className?: string;
+  /** "badge" is the mobile-only premium treatment — a small wine-tinted circular
+   * checkmark badge instead of the bare icon — used when the list stands on its
+   * own beneath the product rather than squeezed beside a small thumbnail.
+   * Desktop always uses "default" (unchanged). */
+  variant?: "default" | "badge";
+}) {
   return (
-    <ul className={cn("flex flex-col gap-1.5", className)}>
+    <ul className={cn("flex flex-col", variant === "badge" ? "gap-3" : "gap-1.5", className)}>
       {heroValueBullets.map((bullet, i) => (
-        <li key={bullet} className="flex items-center gap-2 text-xs font-bold text-ink lg:text-sm">
-          <Check className="h-4 w-4 shrink-0 text-wine" aria-hidden />
+        <li
+          key={bullet}
+          className={cn(
+            "flex items-center font-bold text-ink",
+            variant === "badge" ? "gap-3 text-sm" : "gap-2 text-xs lg:text-sm",
+          )}
+        >
+          {variant === "badge" ? (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-wine/10">
+              <Check className="h-3 w-3 text-wine" strokeWidth={2.5} aria-hidden />
+            </span>
+          ) : (
+            <Check className="h-4 w-4 shrink-0 text-wine" aria-hidden />
+          )}
           <span data-edit-id={`src/lib/data.ts#heroValueBullets-${i}`}>{bullet}</span>
         </li>
       ))}
@@ -73,7 +95,7 @@ function ValueChecklist({ className }: { className?: string }) {
 
 export function Hero() {
   return (
-    <ParallaxSection className="relative isolate flex h-screen flex-col items-center justify-center gap-6 overflow-hidden pb-[3vh] pt-[max(7rem,11vh)]">
+    <ParallaxSection className="relative isolate flex flex-col items-center gap-6 overflow-hidden pb-10 pt-[calc(var(--navbar-h)+90px+1.5rem)] lg:h-screen lg:justify-center lg:pb-[3vh] lg:pt-[max(7rem,11vh)]">
       {/* Back layer — ambient gradient + grain, drifts least as the hero scrolls
           through the viewport so it reads as furthest from the viewer. */}
       <ParallaxLayer range={12} className="pointer-events-none absolute inset-0 h-full w-full">
@@ -82,13 +104,30 @@ export function Hero() {
       </ParallaxLayer>
 
       {/* Mid layer — bleeds down from beneath the fixed navbar, scrolls away with the
-          page instead of staying pinned. Offset by the navbar's own height (75.5px) so
-          it starts exactly at the navbar's bottom edge rather than under it. */}
+          page instead of staying pinned. Offset by --navbar-h, the navbar's real
+          measured height (see Navbar.tsx), so it starts at the navbar's bottom edge
+          regardless of whether the compliance strip above it wraps to one or two lines;
+          shaved by 0.5px so it tucks slightly *under* the opaque navbar rather than risk
+          a sub-pixel gap — invisible either way since the navbar covers it. range={0} (no
+          parallax drift) is equally deliberate, not a placeholder: the navbar above it is
+          position:fixed and never moves, so any independent drift on this layer reopens a
+          visible gap (or overlap) at the seam between them — confirmed via a
+          translateY(22px) offset already present at scroll position 0, before any actual
+          scrolling. Every other decor layer in this section is free to drift; this one
+          specifically can't, since it must stay glued to the fixed navbar.
+
+          Height is shorter on mobile (90px vs desktop's 130px) — a deliberate, mobile-only
+          refinement so the burgundy band terminates higher/flatter at the sides on small
+          screens, per the brand's shallower-curve direction for this phase. HeaderWave's
+          SVG stretches non-uniformly to whatever height it's given (preserveAspectRatio=
+          "none"), so this alone compresses the curve's vertical excursion — no changes to
+          the shared HeaderWave component itself, so PageHero's usage and desktop are both
+          untouched. */}
       <ParallaxLayer
-        range={22}
-        className="pointer-events-none absolute inset-x-0 top-[75.5px] h-[130px] w-full"
+        range={0}
+        className="pointer-events-none absolute inset-x-0 top-[calc(var(--navbar-h)-0.5px)] h-[90px] w-full lg:h-[130px]"
       >
-        <HeaderWave className="h-full w-full drop-shadow-[0_10px_14px_rgba(26,20,20,0.16)]" />
+        <HeaderWave className="h-full w-full drop-shadow-[0_6px_10px_rgba(26,20,20,0.14)] lg:drop-shadow-[0_10px_14px_rgba(26,20,20,0.16)]" />
       </ParallaxLayer>
 
       {/* Text column + rail. At lg the photography below becomes `absolute` and drops out of
@@ -98,10 +137,11 @@ export function Hero() {
         {/* Rail — physically rightmost in the RTL flex row (first DOM child) */}
         <HeroRail />
 
-        {/* Text column — center. Mobile order: headline, paragraph, image+checklist row,
-            buttons. Desktop order (unchanged): headline, paragraph, checklist, buttons —
-            photography floats separately, absolutely positioned beside this column. */}
-        <Reveal className="flex w-full flex-col items-center gap-5 text-center lg:max-w-lg lg:flex-1 lg:items-start lg:gap-4 lg:text-start">
+        {/* Text column — center. Mobile order: headline, paragraph, product (its own
+            standalone visual moment), benefits, buttons. Desktop order (unchanged):
+            headline, paragraph, checklist, buttons — photography floats separately,
+            absolutely positioned beside this column. */}
+        <Reveal className="flex w-full flex-col items-center gap-6 text-center lg:max-w-lg lg:flex-1 lg:items-start lg:gap-4 lg:text-start">
           <div className="max-w-xl lg:max-w-md">
             <AnimatedHeadline
               className="font-display text-[clamp(2.5rem,7vw,4.25rem)] font-black leading-[1.05] tracking-[0.01em] lg:text-[clamp(2.5rem,4.8vw,3.75rem)]"
@@ -119,7 +159,7 @@ export function Hero() {
             />
           </div>
           <p
-            className="mt-5 max-w-md text-xs font-normal leading-relaxed text-stone lg:text-sm"
+            className="max-w-md text-xs font-normal leading-relaxed text-stone lg:mt-5 lg:text-sm"
             data-edit-id="src/components/sections/Hero.tsx#hero-subtext"
           >
             {/* @edit:hero-subtext */}
@@ -131,18 +171,29 @@ export function Hero() {
               the row below, also excluded from the accessibility tree). */}
           <ValueChecklist className="hidden lg:flex" />
 
-          {/* Mobile-only: image bled flush to the screen edge — "entering the frame" —
-              paired beside the checklist at the same vertical level. Checklist comes first
-              in DOM so the image is the row's last child, landing visually leftmost under
-              RTL (matching the desktop side); negative left margin on the image then cancels
-              this column's inherited left padding (px-6) so it reaches the true screen edge
-              without affecting the checklist's own position. */}
-          <div className="flex w-full items-center gap-4 lg:hidden">
-            <ValueChecklist />
-            <div className="-ml-6 w-[8.5rem] shrink-0">
+          {/* Mobile-only: the product now gets its own deliberate visual moment — centered
+              and ~14% larger than the previous edge-bled thumbnail (10.5rem → 12rem),
+              grounded by a very soft ambient wine-tinted glow rather than a hard shadow, so
+              it reads as presented rather than dropped into a row beside the checklist. */}
+          <div className="relative flex w-full justify-center lg:hidden">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-wine/[0.07] blur-2xl"
+            />
+            <div className="w-48">
               <PackagingArt variant="mobile" />
             </div>
           </div>
+
+          {/* Mobile-only: benefits reformatted as a quiet, premium information list — a
+              hairline rule separating it from the product above, generous spacing, and a
+              small wine-tinted badge in place of the bare checkmark — rather than the
+              cramped bullet column that used to share a row with the thumbnail. Desktop's
+              ValueChecklist above is completely untouched. */}
+          <ValueChecklist
+            variant="badge"
+            className="w-full max-w-xs border-t border-hairline pt-5 lg:hidden"
+          />
 
           <div className="flex flex-wrap justify-center gap-4 lg:mt-1 lg:justify-start">
             <Button href="/products" variant="primary-glow">

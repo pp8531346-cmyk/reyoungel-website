@@ -205,7 +205,7 @@ export function EnzymolysisChart({ className }: { className?: string }) {
             >
               <p className="font-bold text-ink">שבוע {active.week}</p>
               <p className="mt-1 text-wine">
-                <span className="font-bold">Reyoungel®</span> · {active.reyoungel}%
+                <span className="font-bold">Reyoungel</span> · {active.reyoungel}%
               </p>
               <p className="text-stone">
                 <span className="font-bold">מותג מוביל באירופה</span> · {active.competitor}%
@@ -220,14 +220,14 @@ export function EnzymolysisChart({ className }: { className?: string }) {
           <span className="h-2.5 w-2.5 rounded-full bg-wine" aria-hidden />
           <span data-edit-id="src/components/decor/EnzymolysisChart.tsx#legend-reyoungel">
             {/* @edit:legend-reyoungel */}
-            Reyoungel®
+            Reyoungel
           </span>
         </span>
         <span className="flex items-center gap-2 text-sm font-bold text-stone">
           <span className="h-2.5 w-2.5 rounded-full bg-stone" aria-hidden />
           <span data-edit-id="src/components/decor/EnzymolysisChart.tsx#legend-competitor">
             {/* @edit:legend-competitor */}
-            מותג מוביל באירופה
+            Reference European Brand
           </span>
         </span>
       </div>
@@ -256,7 +256,7 @@ export function EnzymolysisChart({ className }: { className?: string }) {
                 שבוע
               </th>
               <th scope="col" className="py-2 text-start font-bold text-wine">
-                Reyoungel®
+                Reyoungel
               </th>
               <th scope="col" className="py-2 text-start font-bold">
                 מותג מוביל

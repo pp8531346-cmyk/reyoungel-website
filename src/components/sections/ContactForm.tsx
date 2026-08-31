@@ -30,10 +30,13 @@ function validate(values: FormValues): FormErrors {
 export function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const values: FormValues = {
       name: String(data.get("name") ?? ""),
       clinicName: String(data.get("clinicName") ?? ""),
@@ -45,18 +48,30 @@ export function ContactForm() {
     const nextErrors = validate(values);
     setErrors(nextErrors);
 
-    // Submission endpoint is intentionally not wired up yet — this only
-    // confirms the form passes client-side validation.
-    if (Object.keys(nextErrors).length === 0) {
-      setSubmitted(true);
+    if (Object.keys(nextErrors).length > 0) {
+      const fieldOrder: (keyof FormValues)[] = ["name", "clinicName", "phone", "email", "message"];
+      const firstInvalidField = fieldOrder.find((key) => nextErrors[key]);
+      if (firstInvalidField) {
+        const field = form.elements.namedItem(firstInvalidField);
+        if (field instanceof HTMLElement) field.focus();
+      }
       return;
     }
 
-    const fieldOrder: (keyof FormValues)[] = ["name", "clinicName", "phone", "email", "message"];
-    const firstInvalidField = fieldOrder.find((key) => nextErrors[key]);
-    if (firstInvalidField) {
-      const field = event.currentTarget.elements.namedItem(firstInvalidField);
-      if (field instanceof HTMLElement) field.focus();
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) throw new Error("send failed");
+      setSubmitted(true);
+    } catch {
+      setSubmitError("שליחת הפנייה נכשלה. נסו שוב או צרו קשר בטלפון.");
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -137,13 +152,20 @@ export function ContactForm() {
         error={errors.message}
       />
 
+      {submitError && (
+        <p role="alert" className="text-sm text-wine">
+          {submitError}
+        </p>
+      )}
+
       <button
         type="submit"
-        className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-wine bg-wine px-8 py-3 text-sm font-bold text-cream transition-colors duration-200 hover:border-wine-dark hover:bg-wine-dark active:scale-[0.97]"
+        disabled={submitting}
+        className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-wine bg-wine px-8 py-3 text-sm font-bold text-cream transition-colors duration-200 hover:border-wine-dark hover:bg-wine-dark active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span data-edit-id="src/components/sections/ContactForm.tsx#submit-label">
           {/* @edit:submit-label */}
-          שליחת הפנייה
+          {submitting ? "שולח..." : "שליחת הפנייה"}
         </span>
       </button>
     </form>

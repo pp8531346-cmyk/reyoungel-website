@@ -261,6 +261,19 @@ export function DevEditorOverlay() {
 
       const positionable = target.closest("[data-dev-positionable]");
       if (positionable) {
+        // A positionable element (e.g. the navbar logo) can itself contain a
+        // resizable image — surface that image's corner resize handle too, so
+        // hovering the image offers resize while hovering elsewhere in the
+        // positionable offers drag. Without this, resolveEditableText's early
+        // return below would make the nested image's data-edit-id unreachable.
+        const nestedImg = target.closest("img");
+        if (nestedImg && positionable.contains(nestedImg)) {
+          const editId = nestedImg.getAttribute("data-edit-id");
+          if (editId) ensureResizeHandle(nestedImg as HTMLImageElement, editId);
+        } else if (resizeHandleFor && !positionable.contains(resizeHandleFor)) {
+          removeResizeHandle();
+        }
+
         if (positionable === hoveredRef.current) return;
         clearHoverOutline();
         (positionable as HTMLElement).style.outline = "2px dashed #2b6cb0";
