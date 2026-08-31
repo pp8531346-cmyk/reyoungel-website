@@ -62,7 +62,7 @@ function ValueChecklist({ className }: { className?: string }) {
   return (
     <ul className={cn("flex flex-col gap-1.5", className)}>
       {heroValueBullets.map((bullet, i) => (
-        <li key={bullet} className="flex items-start gap-2 text-xs font-bold text-ink lg:text-sm">
+        <li key={bullet} className="flex items-start gap-2 text-start text-xs font-bold text-ink lg:text-sm">
           <Check className="mt-0.5 h-4 w-4 shrink-0 text-wine" aria-hidden />
           <span data-edit-id={`src/lib/data.ts#heroValueBullets-${i}`}>{bullet}</span>
         </li>

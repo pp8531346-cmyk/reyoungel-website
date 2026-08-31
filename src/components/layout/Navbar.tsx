@@ -104,11 +104,11 @@ export function Navbar() {
           aria-label="Reyoungel — עמוד הבית"
           onClick={() => setOpen(false)}
           data-dev-positionable="navbar-logo-mobile"
-          className="flex h-8 w-[85px] shrink-0 items-center justify-end lg:pointer-events-none lg:h-px"
-          style={{ transform: `translate(${logoOffsetMobile.x}px, ${logoOffsetMobile.y}px)` }}
+          className="flex h-9 w-24 shrink-0 items-center justify-end lg:pointer-events-none lg:h-px"
+          style={{ transform: `translate(${logoOffsetMobile.x}px, ${2 + logoOffsetMobile.y}px)` }}
         >
           <Logo
-            imgClassName="h-8 w-auto object-contain lg:hidden"
+            imgClassName="h-9 w-auto object-contain lg:hidden"
             imgStyle={{ transform: `scale(${logoScaleMobile})` }}
             data-edit-id="src/components/layout/Navbar.tsx#navbar-logo-mobile-img"
           />
