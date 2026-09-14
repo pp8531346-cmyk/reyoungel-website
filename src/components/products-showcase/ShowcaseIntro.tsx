@@ -40,7 +40,7 @@ export function ShowcaseIntro({
   });
 
   return (
-    <section className="relative flex h-screen flex-col items-center justify-center gap-[clamp(0.75rem,2.6vh,2rem)] bg-ivory px-6 py-[5vh] text-center">
+    <section className="relative flex h-screen flex-col items-center justify-center gap-[clamp(0.75rem,2.6vh,2rem)] overflow-x-hidden bg-ivory px-6 py-[5vh] text-center">
       <motion.p
         {...rise(0)}
         className="text-xs font-bold tracking-[0.3em] text-stone"

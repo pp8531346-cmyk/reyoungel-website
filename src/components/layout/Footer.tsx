@@ -16,7 +16,7 @@ export function Footer() {
             <br />
             <span data-edit-id="src/components/layout/Footer.tsx#address-line-2">
               {/* @edit:address-line-2 */}
-              
+              מופעל על ידי גובש בע&quot;מ, ח.פ. 516521531
             </span>
             <br />
             <span data-edit-id="src/components/layout/Footer.tsx#address-line-3">
