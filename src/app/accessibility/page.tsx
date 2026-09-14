@@ -5,9 +5,11 @@ export const metadata: Metadata = {
   title: "הצהרת נגישות",
 };
 
-// The two sections below reflect the real axe-core + Playwright audit run
-// against every page (see the previous session's summary for the full
-// methodology and findings) — not generic boilerplate.
+// The sections below reflect the real axe-core + Playwright audit run against
+// every page (see prior session summaries for methodology) — not generic
+// boilerplate. Re-run after the --color-stone token fix (globals.css) came
+// back with zero violations across all 10 pages, so the limitations section
+// below no longer carries the contrast caveat.
 export default function AccessibilityPage() {
   return (
     <LegalPage title="הצהרת נגישות" updatedDate="14.09.2026">
@@ -26,17 +28,12 @@ export default function AccessibilityPage() {
           <li>לכל הכפתורים והקישורים שם נגיש, ואין רכיבים אינטראקטיביים המקוננים בניגוד לתפקידם הסמנטי.</li>
           <li>ניתן לנווט בכל רכיבי האתר האינטראקטיביים באמצעות מקלדת בלבד, עם מצב פוקוס נראה לעין.</li>
           <li>האתר פועל בפרוטוקול מאובטח (HTTPS).</li>
+          <li>טקסט הגוף באתר עומד ביחס ניגודיות של לפחות 4.5:1 מול הרקע, בהתאם לדרישת AA.</li>
         </ul>
       </LegalSection>
 
       <LegalSection title="מגבלות ידועות">
-        <p>
-          חלק מטקסט הגוף באתר (כגון תיאורי מוצרים ותוויות משניות), הצבוע בגוון המותג &quot;stone&quot;, מציג
-          יחס ניגודיות של כ-3.28–3.65:1 מול הרקע שסביבו בגדלי פונט קטנים — מתחת ליחס המינימלי הנדרש לפי תקן
-          AA (4.5:1). התופעה קיימת במספר עמודים באתר, בטקסט שיווקי קיים מראש. תיקון מלא של הסוגיה מצריך שינוי
-          של גוון מותג משותף (design token) המשמש בקבצים רבים באתר, ולכן הוגדר כמחוץ לתחום סבב עמידה זה, המוקד
-          שלו בהיבטים משפטיים/רגולטוריים. הנושא ידוע לנו ומתועד לטיפול בסבב עיצוב עתידי.
-        </p>
+        <p>נכון למועד עדכון זה, לא ידועות לנו מגבלות נגישות מהותיות באתר.</p>
       </LegalSection>
 
       <LegalSection title="דרכי פנייה נגישות">

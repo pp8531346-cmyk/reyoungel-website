@@ -184,7 +184,7 @@ export function ProductJourney({
                     <dl className="grid grid-cols-2">
                       <div className="border-e border-b border-catalog-gray pb-2 pe-6 lg:pb-3">
                         <dt
-                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone"
                           data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-depth"
                         >
                           {/* @edit:label-depth */}
@@ -199,7 +199,7 @@ export function ProductJourney({
                       </div>
                       <div className="border-b border-catalog-gray pb-2 ps-6 lg:pb-3">
                         <dt
-                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone"
                           data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-structure"
                         >
                           {/* @edit:label-structure */}
@@ -215,7 +215,7 @@ export function ProductJourney({
                       </div>
                       <div className="border-e border-b border-catalog-gray py-2 pe-6 lg:py-3">
                         <dt
-                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone"
                           data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-concentration"
                         >
                           {/* @edit:label-concentration */}
@@ -231,7 +231,7 @@ export function ProductJourney({
                       </div>
                       <div className="border-b border-catalog-gray py-2 ps-6 lg:py-3">
                         <dt
-                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone"
                           data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-duration"
                         >
                           {/* @edit:label-duration */}
@@ -246,7 +246,7 @@ export function ProductJourney({
                       </div>
                       <div className="col-span-2 pt-3">
                         <dt
-                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone/70"
+                          className="text-[10px] font-bold uppercase tracking-[0.14em] text-stone"
                           data-edit-id="src/components/products-showcase/ProductJourney.tsx#label-needle"
                         >
                           {/* @edit:label-needle */}
