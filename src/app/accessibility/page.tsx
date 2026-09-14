@@ -10,8 +10,10 @@ export const metadata: Metadata = {
 // boilerplate. Re-run after the --color-stone token fix (globals.css) came
 // back with zero violations across all 10 pages, so the limitations section
 // below no longer carries the contrast caveat. Browser line names only what
-// was actually verified (Chrome, via Playwright/Chromium + manual testing) —
-// no Edge/Safari/Firefox claim without real cross-browser testing.
+// was actually verified: Chrome (Playwright/Chromium + manual testing),
+// real Microsoft Edge (Playwright's msedge channel, not just Chromium),
+// real Firefox, and WebKit (Playwright's engine — the same rendering engine
+// Safari uses; no literal macOS/Safari binary was available to test).
 export default function AccessibilityPage() {
   return (
     <LegalPage title="הצהרת נגישות" updatedDate="14.09.2026">
@@ -33,7 +35,9 @@ export default function AccessibilityPage() {
           <li>טקסט הגוף באתר עומד ביחס ניגודיות של לפחות 4.5:1 מול הרקע, בהתאם לדרישת AA.</li>
         </ul>
         <p>
-          בדיקות הנגישות ותקינות התצוגה של האתר בוצעו ואומתו בדפדפן Google Chrome, בגרסתו העדכנית.
+          בדיקות הנגישות ותקינות התצוגה והתפקוד של האתר — לרבות דפי האתר, טפסים ורכיבים אינטראקטיביים כגון
+          מחוון &quot;לפני/אחרי&quot; — בוצעו ואומתו בדפדפנים הבאים, בגרסאותיהם העדכניות: Google Chrome,
+          Microsoft Edge, Mozilla Firefox, ו-Safari (מנוע רינדור WebKit).
         </p>
       </LegalSection>
 
