@@ -7,7 +7,7 @@ import { ProductsExperience } from "@/components/products-showcase/ProductsExper
 export const metadata: Metadata = {
   title: "מוצרים",
   description:
-    "סדרת המזרקים של Reyoungel — חמישה ג׳לים היאלורוניים משוזרים, 20 מ״ג/מ״ל, לכל שלב ואזור טיפול מקמטים דקים ועד פיסול נפח.",
+    "סדרת המזרקים של Reyoungel - חמישה ג׳לים היאלורוניים משוזרים, 20 מ״ג/מ״ל, לכל שלב ואזור טיפול מקמטים דקים ועד פיסול נפח.",
 };
 
 export default function ProductsPage() {

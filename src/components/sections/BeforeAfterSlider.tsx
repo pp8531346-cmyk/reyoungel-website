@@ -26,6 +26,15 @@ const WIGGLE_EASE = "easeInOut";
 // position, so it should read as smooth/weighted, not twitchy.
 const DRAG_SPRING = { stiffness: 260, damping: 32, mass: 0.4 };
 
+// Label-click targets — deliberately close to the edges (not all the way to 0/100)
+// so a sliver of the other photo always stays visible, matching how the drag
+// interaction never fully hides either side. Same premium ease the intro reveal
+// sweep uses (below), for a deliberate settle rather than the drag's snappy spring.
+const BEFORE_TARGET = 8;
+const AFTER_TARGET = 92;
+const LABEL_JUMP_DURATION = 0.7;
+const PREMIUM_EASE = [0.16, 1, 0.3, 1] as const;
+
 /**
  * Draggable before/after comparison. "Before" sits on the right (RTL reading
  * start, matches the "לפני" label reading first) and "after" on the left —
@@ -61,6 +70,12 @@ export function BeforeAfterSlider({
   const shouldReduceMotion = useReducedMotion();
   const [interactive, setInteractive] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  // Which label (if either) the divider is currently resting at, for the pill's own
+  // "selected" styling below — set on label click, cleared the moment the user takes
+  // manual control (dragging the handle or clicking elsewhere on the image), since at
+  // that point the divider position is no longer "the before/after preset", it's
+  // wherever the user put it.
+  const [activeSide, setActiveSide] = useState<"before" | "after" | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
   const introPlayedRef = useRef(false);
@@ -125,6 +140,7 @@ export function BeforeAfterSlider({
 
   function handlePointerDown(e: React.PointerEvent) {
     if (!isInteractive) return;
+    setActiveSide(null);
     draggingRef.current = true;
     setIsDragging(true);
     try {
@@ -141,6 +157,25 @@ export function BeforeAfterSlider({
     activeAnimationRef.current = animate(percent, percentFromClientX(e.clientX), {
       type: "spring",
       ...DRAG_SPRING,
+    });
+  }
+
+  /** Label-click shortcut — jumps the SAME `percent` motion value the drag handlers
+   * above drive, rather than any separate/competing state, so dragging afterward
+   * picks up exactly where this leaves off. Works immediately even mid-intro-sweep
+   * (a deliberate click shouldn't sit blocked behind the passive reveal animation):
+   * stopping introAnimationRef and marking introPlayedRef pre-empts the intro's own
+   * IntersectionObserver from restarting it later, and setInteractive(true) hands
+   * the drag handlers control the same way the intro's own completion normally does. */
+  function jumpTo(side: "before" | "after") {
+    introPlayedRef.current = true;
+    introAnimationRef.current?.stop();
+    activeAnimationRef.current?.stop();
+    if (!interactive) setInteractive(true);
+    setActiveSide(side);
+    activeAnimationRef.current = animate(percent, side === "before" ? BEFORE_TARGET : AFTER_TARGET, {
+      duration: shouldReduceMotion ? 0 : LABEL_JUMP_DURATION,
+      ease: PREMIUM_EASE,
     });
   }
 
@@ -245,29 +280,71 @@ export function BeforeAfterSlider({
           </motion.div>
         </motion.div>
 
-        {/* Labels — pill badges, fade/slide in on mount */}
-        <motion.span
+        {/* Labels — pill badges, fade/slide in on mount. Also double as click
+            shortcuts for the same `percent` value the drag handlers above drive
+            (jumpTo) — stopPropagation on pointerDown keeps that click from also
+            bubbling into the container's own onPointerDown (which would otherwise
+            glide-to-the-label's-own-position first, fighting jumpTo's target the
+            instant it fires). Background/scale react to activeSide for "which one
+            is selected" feedback; the underlying reveal amount is the real signal
+            either way — this is just making it unambiguous which preset it's at. */}
+        <motion.button
+          type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => jumpTo("before")}
+          aria-pressed={activeSide === "before"}
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-none absolute bottom-3 end-3 z-10 rounded-full px-3 py-1.5 text-[11px] font-bold text-cream"
-          style={{ background: "rgba(0,0,0,0.55)" }}
-          data-edit-id="src/components/sections/BeforeAfterSlider.tsx#label-before"
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: activeSide === "before" ? 1.06 : 1,
+            backgroundColor: activeSide === "before" ? "#ab213a" : "rgba(0,0,0,0.55)",
+          }}
+          whileHover={{ scale: activeSide === "before" ? 1.06 : 1.04 }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            // Only the initial mount fade/slide gets the stagger delay — the
+            // activeSide-driven scale/color feedback below should react instantly
+            // to a click, not lag behind it by the same amount.
+            opacity: { duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            scale: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+            backgroundColor: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+          }}
+          className="absolute bottom-3 end-3 z-10 cursor-pointer rounded-full px-3 py-1.5 text-[11px] font-bold text-cream outline-none focus-visible:ring-2 focus-visible:ring-cream/70"
         >
-          {/* @edit:label-before */}
-          לפני
-        </motion.span>
-        <motion.span
+          <span data-edit-id="src/components/sections/BeforeAfterSlider.tsx#label-before">
+            {/* @edit:label-before */}
+            לפני הטיפול
+          </span>
+        </motion.button>
+        <motion.button
+          type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => jumpTo("after")}
+          aria-pressed={activeSide === "after"}
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-none absolute bottom-3 start-3 z-10 rounded-full px-3 py-1.5 text-[11px] font-bold text-cream"
-          style={{ background: "rgba(0,0,0,0.55)" }}
-          data-edit-id="src/components/sections/BeforeAfterSlider.tsx#label-after"
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: activeSide === "after" ? 1.06 : 1,
+            backgroundColor: activeSide === "after" ? "#ab213a" : "rgba(0,0,0,0.55)",
+          }}
+          whileHover={{ scale: activeSide === "after" ? 1.06 : 1.04 }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            opacity: { duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+            scale: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+            backgroundColor: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+          }}
+          className="absolute bottom-3 start-3 z-10 cursor-pointer rounded-full px-3 py-1.5 text-[11px] font-bold text-cream outline-none focus-visible:ring-2 focus-visible:ring-cream/70"
         >
-          {/* @edit:label-after */}
-          אחרי טיפול
-        </motion.span>
+          <span data-edit-id="src/components/sections/BeforeAfterSlider.tsx#label-after">
+            {/* @edit:label-after */}
+            אחרי טיפול
+          </span>
+        </motion.button>
       </div>
 
       <p

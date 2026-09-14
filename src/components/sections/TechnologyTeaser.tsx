@@ -29,10 +29,15 @@ export function TechnologyTeaser() {
               הטכנולוגיה שמאחורי
             </span>
           </p>
-          <h2 className="max-w-md font-display text-3xl font-black leading-tight lg:text-4xl">
-            <span data-edit-id="src/components/sections/TechnologyTeaser.tsx#headline">
-              {/* @edit:headline */}
-              SAX-HA - טכנולוגיית ההצלבה הייחודית של 
+          <h2 className="max-w-md font-display text-lg font-black leading-tight sm:text-3xl lg:text-4xl">
+            <span data-edit-id="src/components/sections/TechnologyTeaser.tsx#headline-lead">
+              {/* @edit:headline-lead */}
+              SAX-HA - טכנולוגיית{" "}
+            </span>
+            <br className="lg:hidden" />
+            <span data-edit-id="src/components/sections/TechnologyTeaser.tsx#headline-tail">
+              {/* @edit:headline-tail */}
+              ההצלבה הייחודית של{" "}
             </span>
             <BrandLogo variant="white" />
           </h2>

@@ -1,8 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
 import type { heroBoxes } from "@/lib/productShowcaseContent";
+import { SpriteBoxImage } from "./SpriteBoxImage";
 
 type HeroBox = (typeof heroBoxes)[number];
 
@@ -22,6 +22,8 @@ export function FloatingProductBadge({
   visible: boolean;
 }) {
   const shouldReduceMotion = useReducedMotion();
+  const boxWidthPct = box.rect.x2 - box.rect.x1;
+  const boxHeightPct = box.rect.y2 - box.rect.y1;
 
   return (
     <AnimatePresence>
@@ -33,13 +35,22 @@ export function FloatingProductBadge({
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="fixed left-6 top-24 z-40 h-16 w-11"
         >
-          <Image
-            src={box.src}
-            alt={productName}
-            width={box.width}
-            height={box.height}
-            className="h-full w-full object-contain drop-shadow-[0_10px_18px_rgba(26,20,20,0.2)]"
-          />
+          {/* mx-auto + aspectRatio (matching box.rect's own width:height) lets this
+              shrink-fit within the h-16 w-11 footprint the same way object-contain on
+              a plain <img> would — needed here because SpriteBoxImage's crop math
+              only stays undistorted when its wrapper has that exact aspect (see
+              SpriteBoxImage's own doc comment). */}
+          <div
+            className="relative mx-auto h-full overflow-hidden"
+            style={{ aspectRatio: `${boxWidthPct} / ${boxHeightPct}` }}
+          >
+            <SpriteBoxImage
+              box={box}
+              alt={productName}
+              sizes="44px"
+              imageClassName="object-contain drop-shadow-[0_10px_18px_rgba(26,20,20,0.2)]"
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

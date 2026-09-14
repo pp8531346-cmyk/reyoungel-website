@@ -75,7 +75,14 @@ export function EnzymolysisChart({ className }: { className?: string }) {
             ref={ref}
             viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
             className="h-auto w-full overflow-visible"
-            role="img"
+            // role="group" (not "img") — the chart isn't a static image, it has 5
+            // real focusable hit-targets below (role="button", tabIndex=0) for the
+            // per-checkpoint tooltip. "img" asserts a leaf/atomic node to assistive
+            // tech, which directly conflicts with those interactive descendants
+            // (axe-core: "nested-interactive" / "Element has focusable
+            // descendants"). "group" keeps the same descriptive aria-label while
+            // permitting real interactive children.
+            role="group"
             aria-label="גרף המחשה: קצב פירוק אנזימטי (in-vitro) לאורך זמן, Reyoungel לעומת מותג מוביל באירופה"
           >
             {gridValues.map((v) => (

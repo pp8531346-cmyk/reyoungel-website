@@ -29,20 +29,34 @@ export function TrustAndStats() {
           {/* @edit:approved-line */}
           מאושר ע&rdquo;י ה-CE האירופאי ומשרד הבריאות בישראל
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+        {/* flex-nowrap (not flex-wrap) is load-bearing: with wrap allowed, 2 items
+            fit the row's available width and the 3rd — whichever has the widest
+            natural (unwrapped) content, usually MOH's much longer description —
+            got pushed to its own line alone. Removing wrap and giving every level
+            (item, then its text column) `min-w-0` forces all 3 to always share one
+            row instead: the description text wraps *within* its own narrow column
+            (2-3 short lines is fine here — normal, not a bug) rather than the row
+            itself ever breaking. gap/icon/font shrink at the base (mobile) tier and
+            open back up at sm: purely to buy width headroom on the narrowest
+            phones, where 3 columns plus MOH's long description needs it most. */}
+        <div className="flex flex-nowrap items-start justify-center gap-x-3 gap-y-6 sm:items-center sm:gap-x-10">
           {certifications.map((cert) => (
-            <div key={cert.id} className="flex items-center gap-3">
-              <ShieldCheck className="h-6 w-6 shrink-0 text-wine" strokeWidth={1.5} aria-hidden />
-              <div className="text-start">
+            <div key={cert.id} className="flex min-w-0 items-start gap-1.5 sm:items-center sm:gap-3">
+              <ShieldCheck
+                className="h-4 w-4 shrink-0 text-wine sm:h-6 sm:w-6"
+                strokeWidth={1.5}
+                aria-hidden
+              />
+              <div className="min-w-0 text-start">
                 <p
                   dir="ltr"
-                  className="text-sm font-bold text-ink"
+                  className="text-xs font-bold text-ink sm:text-sm"
                   data-edit-id={`src/lib/data.ts#certifications-${cert.id}-label`}
                 >
                   {cert.label}
                 </p>
                 <p
-                  className="text-xs text-stone"
+                  className="text-[10px] leading-snug text-stone sm:text-xs"
                   data-edit-id={`src/lib/data.ts#certifications-${cert.id}-description`}
                 >
                   {cert.description}

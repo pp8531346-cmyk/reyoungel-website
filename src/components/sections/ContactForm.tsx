@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { FloatingField } from "@/components/ui/FloatingField";
 
 type FormValues = {
@@ -9,6 +10,7 @@ type FormValues = {
   phone: string;
   email: string;
   message: string;
+  consent: boolean;
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -24,6 +26,7 @@ function validate(values: FormValues): FormErrors {
     errors.email = "כתובת אימייל אינה תקינה";
   }
   if (!values.message.trim()) errors.message = "נא לכתוב הודעה קצרה";
+  if (!values.consent) errors.consent = "יש לאשר את מדיניות הפרטיות כדי לשלוח את הטופס";
   return errors;
 }
 
@@ -43,13 +46,24 @@ export function ContactForm() {
       phone: String(data.get("phone") ?? ""),
       email: String(data.get("email") ?? ""),
       message: String(data.get("message") ?? ""),
+      // Checkboxes only appear in FormData when checked — absence means false,
+      // not an empty string, so this can't reuse the `String(... ?? "")` pattern
+      // the text fields above use.
+      consent: data.get("consent") === "on",
     };
 
     const nextErrors = validate(values);
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      const fieldOrder: (keyof FormValues)[] = ["name", "clinicName", "phone", "email", "message"];
+      const fieldOrder: (keyof FormValues)[] = [
+        "name",
+        "clinicName",
+        "phone",
+        "email",
+        "message",
+        "consent",
+      ];
       const firstInvalidField = fieldOrder.find((key) => nextErrors[key]);
       if (firstInvalidField) {
         const field = form.elements.namedItem(firstInvalidField);
@@ -151,6 +165,31 @@ export function ContactForm() {
         rows={5}
         error={errors.message}
       />
+
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-start gap-2.5">
+          <input
+            type="checkbox"
+            id="consent"
+            name="consent"
+            required
+            aria-invalid={!!errors.consent}
+            aria-describedby={errors.consent ? "consent-error" : undefined}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-wine"
+          />
+          <label htmlFor="consent" className="text-sm leading-relaxed text-ink">
+            קראתי ואני מסכים/ה ל
+            <Link href="/privacy" className="font-bold text-wine underline underline-offset-2 hover:text-wine-dark">
+              מדיניות הפרטיות
+            </Link>
+          </label>
+        </div>
+        {errors.consent && (
+          <p id="consent-error" role="alert" className="text-xs text-wine">
+            {errors.consent}
+          </p>
+        )}
+      </div>
 
       {submitError && (
         <p role="alert" className="text-sm text-wine">

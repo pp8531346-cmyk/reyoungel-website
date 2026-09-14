@@ -1,11 +1,24 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { showcaseIntro, heroBoxes } from "@/lib/productShowcaseContent";
 import { products } from "@/lib/data";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { SpriteBoxImage } from "./SpriteBoxImage";
+
+/** heroBoxes' rects only cover the ~7.6%-93.73% horizontal / ~34%-72.33% vertical
+ * band of heroBoxesSprite (min x1/y1, max x2/y2 across heroBoxes — measured, not
+ * eyeballed) — the sprite has a lot of headroom above/below the row itself, unlike
+ * the old individually-cropped box images, which filled their row edge-to-edge.
+ * Reproducing the row's pre-sprite on-screen size therefore means rendering a
+ * (square, to match heroBoxesSprite's own 1:1 aspect — required so object-contain
+ * doesn't letterbox and throw off every box's rect-based crop) canvas considerably
+ * bigger than the row's actual visible footprint, then centering it on that
+ * footprint via this origin (its content band's own midpoint, not plain 50/50) and
+ * clipping the overflow via the footprint element's own overflow-hidden — see the
+ * frame/canvas sizing comments below for the rest of the derivation. */
+const CANVAS_ORIGIN = { x: 50.665, y: 53.165 };
 
 export function ShowcaseIntro({
   onSelectProduct,
@@ -39,7 +52,7 @@ export function ShowcaseIntro({
 
       <motion.h1
         {...rise(0.1)}
-        className="max-w-3xl text-balance font-display text-[clamp(1.5rem,3.4vw,2.75rem)] font-black leading-[1.15] text-ink"
+        className="max-w-3xl whitespace-nowrap font-display text-[clamp(1.375rem,3.4vw,2.75rem)] font-black leading-[1.15] text-ink"
         data-edit-id="src/lib/productShowcaseContent.ts#showcaseIntro-headline"
       >
         {showcaseIntro.headline} <BrandLogo variant="ink" />
@@ -56,47 +69,75 @@ export function ShowcaseIntro({
           className="absolute inset-x-[8%] bottom-[8%] -z-10 h-[12%] rounded-[100%] bg-ink/10 blur-2xl"
         />
 
-        {/* Children are all `absolute` (no in-flow content), so shrink-to-fit sizing
-            (w-fit + aspect-ratio) collapses to 0×0 — width/height are computed
-            explicitly instead, each capped by whichever of the vh or vw budget is
-            more restrictive, so the row never overflows its max-w-[90vw] ancestor. */}
-        <div
-          className="relative mx-auto w-[min(90vw,calc(26vh*2.0102))] h-[min(26vh,calc(90vw/2.0102))] lg:w-[min(90vw,calc(36vh*2.0102))] lg:h-[min(36vh,calc(90vw/2.0102))]"
-        >
-          {heroBoxes.map((box, i) => {
-            const product = products[i];
-            return (
-              <button
-                key={box.code}
-                type="button"
-                onClick={() => onSelectProduct(i)}
-                aria-label={`עברו למוצר ${product.name}`}
-                className="group absolute outline-none"
-                style={{
-                  left: `${box.rect.x1}%`,
-                  top: `${box.rect.y1}%`,
-                  width: `${box.rect.x2 - box.rect.x1}%`,
-                  height: `${box.rect.y2 - box.rect.y1}%`,
-                }}
-              >
-                <motion.div
-                  className="relative h-full w-full"
+        {/* Frame — sized to the row's own visible footprint (the pre-sprite version's
+            on-screen size: heroBoxesSprite has a lot of headroom above/below the row
+            itself, so reproducing that size means the canvas below has to render
+            considerably bigger than this footprint — see the module comment above).
+            This div's own declared size is what the surrounding flex column budgets
+            space for, so it stays tightly fit to that footprint — but deliberately
+            has NO `overflow-hidden`: the canvas below is `position: absolute` and
+            paints nothing itself (only its five button children do, each already
+            cropped by its own `overflow-hidden` — see below), so an absolute canvas
+            far bigger than this frame never bleeds or inflates this frame's layout
+            size regardless of overflow. Clipping here anyway (an earlier version of
+            this fix did, "just to be safe") bought nothing at rest — the buttons
+            already land within this footprint by construction — and instead clipped
+            every box's own whileHover scale/lift the moment it grew past this div's
+            edge. Leaving overflow visible is what lets that hover growth render
+            uncropped. */}
+        <div className="relative mx-auto h-[min(22.1vh,40.05vw)] w-[min(90vw,49.7vh)] lg:h-[min(30.6vh,40.05vw)] lg:w-[min(90vw,68.8vh)]">
+          {/* Canvas — square, matching heroBoxesSprite's own 1500×1500 aspect exactly
+              (required: object-contain inside a non-square box would letterbox and
+              throw off every box's rect-based crop below). Sized so that, once
+              centered on the frame above via CANVAS_ORIGIN, exactly the row's own
+              content band lands inside the frame's footprint — i.e. canvas side ×
+              contentPct = frame side. Paints nothing of its own; see the frame
+              comment above for why its own (much larger) size is harmless. */}
+          <div
+            className="absolute h-[min(57.7vh,104.5vw)] w-[min(57.7vh,104.5vw)] lg:h-[min(79.8vh,104.5vw)] lg:w-[min(79.8vh,104.5vw)]"
+            style={{ left: "50%", top: "50%", transform: `translate(-${CANVAS_ORIGIN.x}%, -${CANVAS_ORIGIN.y}%)` }}
+          >
+            {heroBoxes.map((box, i) => {
+              const product = products[i];
+              // This button is a clipped "window" onto heroBoxesSprite (one shared image,
+              // all 5 boxes together — supplied as-is, not cropped by us). SpriteBoxImage
+              // renders that SAME full sprite at a size/offset computed so only this box's
+              // own slice (box.rect) lands inside the window — no distortion, since the
+              // canvas above is square like the sprite itself. Hover/focus lift+scale is
+              // applied to this OUTER window, not the inner sprite — scaling the inner div
+              // directly would zoom from its own transform-origin (mostly off-screen, since
+              // it's rendered many times larger than the visible slice), displacing the
+              // visible content instead of zooming it in place.
+              const boxWidthPct = box.rect.x2 - box.rect.x1;
+              const boxHeightPct = box.rect.y2 - box.rect.y1;
+              return (
+                <motion.button
+                  key={box.code}
+                  type="button"
+                  onClick={() => onSelectProduct(i)}
+                  aria-label={`עברו למוצר ${product.name}`}
+                  className="group absolute overflow-hidden outline-none"
+                  style={{
+                    left: `${box.rect.x1}%`,
+                    top: `${box.rect.y1}%`,
+                    width: `${boxWidthPct}%`,
+                    height: `${boxHeightPct}%`,
+                  }}
                   whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.05, zIndex: 2 }}
                   whileFocus={shouldReduceMotion ? undefined : { y: -8, scale: 1.05, zIndex: 2 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Image
-                    src={box.src}
+                  <SpriteBoxImage
+                    box={box}
                     alt={product.name}
-                    fill
-                    sizes="10vw"
-                    className="object-contain drop-shadow-[0_10px_20px_rgba(26,20,20,0.14)] transition-[filter] duration-300 group-hover:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)] group-focus-visible:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)]"
-                    data-edit-id={`src/lib/productShowcaseContent.ts#heroBoxes-${box.code}`}
+                    sizes="90vw"
+                    editable
+                    imageClassName="object-contain drop-shadow-[0_10px_20px_rgba(26,20,20,0.14)] transition-[filter] duration-300 group-hover:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)] group-focus-visible:drop-shadow-[0_20px_34px_rgba(171,33,58,0.3)]"
                   />
-                </motion.div>
-              </button>
-            );
-          })}
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
       </motion.div>
 

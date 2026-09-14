@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     from: "Reyoungel Website <onboarding@resend.dev>",
     to: contactEmail,
     replyTo: email,
-    subject: `פנייה חדשה מהאתר — ${name}`,
+    subject: `פנייה חדשה מהאתר - ${name}`,
     text: `שם: ${name}\nקליניקה: ${clinicName}\nטלפון: ${phone}\nאימייל: ${email}\n\nהודעה:\n${message}`,
   });
 

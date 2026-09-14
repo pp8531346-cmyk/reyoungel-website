@@ -30,15 +30,16 @@ export function CtaBand() {
             headline, centered button row" formula used elsewhere. */}
         <div className="grain relative overflow-hidden rounded-tl-[7rem] rounded-br-[7rem] bg-wine px-6 pb-16 pt-20 text-cream lg:rounded-tl-[9rem] lg:rounded-br-[9rem] lg:px-16 lg:py-20">
           <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center lg:max-w-none lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-start">
-            <h2 className="font-display text-3xl font-black leading-tight lg:max-w-md lg:text-4xl">
+            <h2 className="font-display text-[21px] font-black leading-tight sm:text-3xl lg:max-w-md lg:text-4xl">
               <span data-edit-id="src/components/sections/CtaBand.tsx#headline-lead">
                 {/* @edit:headline-lead */}
                 מוכנים לשלב את{" "}
               </span>
               <BrandLogo variant="white" />
+              <br className="lg:hidden" />
               <span data-edit-id="src/components/sections/CtaBand.tsx#headline-tail">
                 {/* @edit:headline-tail */}
-                {" "}בקליניקה שלכם?
+                בקליניקה שלכם?
               </span>
             </h2>
             <div className="flex flex-wrap justify-center gap-4 lg:shrink-0 lg:flex-nowrap lg:justify-end">

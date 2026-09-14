@@ -14,14 +14,18 @@ const certificateImages: Record<
 
 export function CertificationShowcase() {
   return (
-    <section className="bg-ivory px-6 pb-20 lg:px-10 lg:pb-28">
+    <section className="bg-ivory px-6 pb-20 pt-20 lg:px-10 lg:pb-28 lg:pt-28">
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-        <h2
-          className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
-          data-edit-id="src/components/sections/CertificationShowcase.tsx#headline"
-        >
-          {/* @edit:headline */}
-          עומדים בתווי התקן המחמירים ביותר
+        <h2 className="max-w-lg font-display text-2xl font-black text-ink sm:text-3xl lg:text-4xl">
+          <span data-edit-id="src/components/sections/CertificationShowcase.tsx#headline-lead">
+            {/* @edit:headline-lead */}
+            עומדים בתווי התקן
+          </span>
+          <br className="lg:hidden" />
+          <span data-edit-id="src/components/sections/CertificationShowcase.tsx#headline-tail">
+            {/* @edit:headline-tail */}
+            {" "}המחמירים ביותר
+          </span>
         </h2>
         <p
           className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
@@ -44,7 +48,7 @@ export function CertificationShowcase() {
                 <div className="hover-lift-card w-32 overflow-hidden rounded-lg border border-hairline bg-cream shadow-sm sm:w-36">
                   <Image
                     src={image.src}
-                    alt={`${cert.label} — ${cert.description}`}
+                    alt={`${cert.label} - ${cert.description}`}
                     width={image.width}
                     height={image.height}
                     sizes="144px"

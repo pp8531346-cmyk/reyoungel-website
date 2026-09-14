@@ -13,7 +13,7 @@ const sources = [
     n: 1,
     text: /* @edit:sources-0-text */ "נתוני מחקר קליני טרום-שיווקי שביצעה Bioha Laboratories, במעקב אחר 357 מטופלים בסין וברוסיה, כולל השוואת קצב פירוק אנזימטי (in-vitro) למותג מוביל באירופה.",
   },
-  { n: 2, text: /* @edit:sources-1-text */ "נתוני שביעות רצון רופאים ומטופלים — ממחקרי החברה." },
+  { n: 2, text: /* @edit:sources-1-text */ "נתוני שביעות רצון רופאים ומטופלים - ממחקרי החברה." },
 ];
 
 export default function Home() {

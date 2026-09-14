@@ -5,7 +5,7 @@ export function ComplianceBar() {
       data-edit-id="src/components/layout/ComplianceBar.tsx#compliance-text"
     >
       {/* @edit:compliance-text */}
-      מוצרים המיועדים לשימוש מקצועי בלבד — להזרקה על ידי איש מקצוע רפואי מוסמך בלבד
+      מוצרים המיועדים לשימוש מקצועי בלבד - להזרקה על ידי איש מקצוע רפואי מוסמך בלבד
     </div>
   );
 }

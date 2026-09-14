@@ -120,17 +120,17 @@ export function Hero() {
         <Reveal className="flex w-full flex-col items-center gap-5 text-center lg:max-w-lg lg:flex-1 lg:items-start lg:gap-4 lg:text-start">
           <div className="max-w-xl lg:max-w-md">
             <AnimatedHeadline
-              className="font-display text-[clamp(2.5rem,7vw,4.25rem)] font-black leading-[1.05] tracking-[0.01em] lg:text-[clamp(2.5rem,4.8vw,3.75rem)]"
+              className="font-display text-[clamp(2rem,7vw,4.25rem)] font-black leading-[1.05] tracking-[0.01em] lg:text-[clamp(2.5rem,4.8vw,3.75rem)]"
               lineClassNames={["text-wine", "text-ink"]}
               editFile="src/components/sections/Hero.tsx"
               editIdPrefix="headline"
               lines={[
                 [
-                  /* @edit:headline-0-0 */ "להיראות ",
+                  /* @edit:headline-0-0 */ "להיראות",
                   /* @edit:headline-0-1 */ "כמו",
                   /* @edit:headline-0-2 */ "עצמך",
                 ],
-                [/* @edit:headline-1-0 */ "רק ", /* @edit:headline-1-1 */ "במיטבך"],
+                [/* @edit:headline-1-0 */ "רק", /* @edit:headline-1-1 */ "במיטבך"],
               ]}
             />
           </div>

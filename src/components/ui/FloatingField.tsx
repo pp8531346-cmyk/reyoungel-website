@@ -31,9 +31,14 @@ export function FloatingField(props: FloatingFieldProps) {
     className,
   );
 
+  // peer-placeholder-shown (resting/empty state) uses text-ink/60, not the
+  // site's usual text-stone — text-stone measures 3.65:1 against this field's
+  // bg-cream, under WCAG AA's 4.5:1 minimum for text (confirmed via axe-core,
+  // this affects every field's label on first render, before it's focused or
+  // filled). ink/60 clears it (4.76:1) at a similar visual weight to stone.
   const labelClassName = cn(
     "pointer-events-none absolute start-4 top-2 text-xs font-bold tracking-wide text-wine transition-all",
-    "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:font-normal peer-placeholder-shown:tracking-normal peer-placeholder-shown:text-stone",
+    "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:font-normal peer-placeholder-shown:tracking-normal peer-placeholder-shown:text-ink/60",
     "peer-focus:top-2 peer-focus:-translate-y-0 peer-focus:text-xs peer-focus:font-bold peer-focus:tracking-wide peer-focus:text-wine",
   );
 

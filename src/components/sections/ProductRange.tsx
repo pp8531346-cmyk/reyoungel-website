@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfterSlider } from "@/components/sections/BeforeAfterSlider";
+import { SpriteBoxImage } from "@/components/products-showcase/SpriteBoxImage";
 import { products } from "@/lib/data";
 import { heroBoxes } from "@/lib/productShowcaseContent";
 
@@ -16,9 +16,9 @@ import { heroBoxes } from "@/lib/productShowcaseContent";
 const cardDescriptions: Record<(typeof products)[number]["code"], string> = {
   R001: /* @edit:cardDescriptions-R001 */ "לקמטי ההבעה העדינים ביותר באזור שקעי העיניים והברקודים",
   R002: /* @edit:cardDescriptions-R002 */ "לשפתיים ולקמטים בעומק בינוני, ולחידוד קו מתאר השפה.",
-  R003: /* @edit:cardDescriptions-R003 */ "לנפח שפתיים ולחיים, ולטיפול בקפל האף–שפה ובקמטי המריונטה.",
+  R003: /* @edit:cardDescriptions-R003 */ "לנפח שפתיים ולחיים, ולטיפול בקפל האף-שפה ובקמטי המריונטה.",
   R004: /* @edit:cardDescriptions-R004 */ "לעיצוב עצמות הלחי, הסנטר, קו הלסת והנפח העמוק.",
-  R005: /* @edit:cardDescriptions-R005 */ "לעיצוב מתאר הפנים והגוף — קו הלסת, הסנטר, עצמות הלחיים והאף.",
+  R005: /* @edit:cardDescriptions-R005 */ "לעיצוב מתאר הפנים והגוף - קו הלסת, הסנטר, עצמות הלחיים והאף.",
 };
 
 // Matched before/after pair — same head position/angle/zoom/framing on both,
@@ -116,17 +116,24 @@ export function ProductRange() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  {/* 3. Box image */}
+                  {/* 3. Box image — mx-auto + aspectRatio (matching box.rect's own
+                      width:height) lets this shrink-fit within the h-14 w-9 footprint
+                      the way object-contain on a plain <img> would; SpriteBoxImage's
+                      crop math only stays undistorted when its wrapper has that exact
+                      aspect (see SpriteBoxImage's own doc comment). */}
                   {box && (
                     <div className="relative h-14 w-9 shrink-0">
-                      <Image
-                        src={box.src}
-                        alt=""
-                        fill
-                        sizes="36px"
-                        className="hover-lift-image object-contain drop-shadow-[0_6px_12px_rgba(26,20,20,0.14)]"
-                        data-edit-id={`src/components/sections/ProductRange.tsx#box-${product.code}`}
-                      />
+                      <div
+                        className="relative mx-auto h-full overflow-hidden"
+                        style={{ aspectRatio: `${box.rect.x2 - box.rect.x1} / ${box.rect.y2 - box.rect.y1}` }}
+                      >
+                        <SpriteBoxImage
+                          box={box}
+                          alt=""
+                          sizes="36px"
+                          imageClassName="hover-lift-image object-contain drop-shadow-[0_6px_12px_rgba(26,20,20,0.14)]"
+                        />
+                      </div>
                     </div>
                   )}
 

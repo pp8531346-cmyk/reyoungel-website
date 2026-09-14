@@ -12,7 +12,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 export const metadata: Metadata = {
   title: "טכנולוגיה",
   description:
-    "טכנולוגיית SAX-HA הפטנטית של Reyoungel (פטנט מס' ZL 2012 1 0372786.0) — שזירה נקייה יותר, פחות תגובות לוואי, ותוצאה יציבה לאורך זמן.",
+    "טכנולוגיית SAX-HA הפטנטית של Reyoungel (פטנט מס' ZL 2012 1 0372786.0) - שזירה נקייה יותר, פחות תגובות לוואי, ותוצאה יציבה לאורך זמן.",
 };
 
 export default function TechnologyPage() {
@@ -22,7 +22,13 @@ export default function TechnologyPage() {
       <main>
         <PageHero
           eyebrow="הטכנולוגיה שלנו"
-          title="SAX-HA - הטכנולוגיה הייחודית שלנו"
+          title={
+            <>
+              SAX-HA - הטכנולוגיה
+              <br className="lg:hidden" />
+              הייחודית שלנו
+            </>
+          }
           eyebrowEditId="src/app/technology/page.tsx#hero-eyebrow"
           titleEditId="src/app/technology/page.tsx#hero-title"
         >
@@ -50,12 +56,16 @@ export default function TechnologyPage() {
                 {/* @edit:s1-eyebrow */}
                 
               </p>
-              <h2
-                className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
-                data-edit-id="src/app/technology/page.tsx#s1-headline"
-              >
-                {/* @edit:s1-headline */}
-                ניקיון גבוה יותר- ביצועים יציבים יותר
+              <h2 className="max-w-lg font-display text-2xl font-black text-ink sm:text-3xl lg:text-4xl">
+                <span data-edit-id="src/app/technology/page.tsx#s1-headline-lead">
+                  {/* @edit:s1-headline-lead */}
+                  ניקיון גבוה יותר-
+                </span>
+                <br className="lg:hidden" />
+                <span data-edit-id="src/app/technology/page.tsx#s1-headline-tail">
+                  {/* @edit:s1-headline-tail */}
+                  {" "}ביצועים יציבים יותר
+                </span>
               </h2>
               <p
                 className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
@@ -120,14 +130,14 @@ export default function TechnologyPage() {
             literal "plain rectangle" wine block on the site. Bookended with the
             same organic SectionCurve wave already used at PageHero/CtaBand
             boundaries instead of inventing a new shape primitive. */}
-        <section className="grain relative overflow-hidden bg-wine px-6 py-24 text-center text-cream lg:py-32">
+        <section className="grain relative overflow-hidden bg-wine px-6 py-16 text-center text-cream lg:py-20">
           <SectionCurve
             fill="var(--color-ivory)"
             className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 w-full -scale-y-100 lg:h-20"
           />
           <Reveal className="relative z-20 mx-auto max-w-3xl lg:max-w-4xl">
             <p
-              className="text-balance font-display text-3xl font-black leading-tight lg:whitespace-nowrap lg:text-5xl"
+              className="whitespace-nowrap font-display text-sm font-black leading-tight sm:text-3xl lg:text-5xl"
               data-edit-id="src/app/technology/page.tsx#banner-text"
             >
               {/* @edit:banner-text */}
@@ -143,7 +153,7 @@ export default function TechnologyPage() {
         <section className="bg-ivory px-6 pb-20 pt-20 lg:px-10 lg:pb-28 lg:pt-28">
           <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
             <h2
-              className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
+              className="max-w-lg whitespace-nowrap font-display text-lg font-black text-ink sm:text-3xl lg:text-4xl"
               data-edit-id="src/app/technology/page.tsx#s3-headline"
             >
               {/* @edit:s3-headline */}

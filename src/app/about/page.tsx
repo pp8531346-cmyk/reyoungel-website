@@ -11,7 +11,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 export const metadata: Metadata = {
   title: "אודות",
   description:
-    "Bioha Laboratories — בית המעבדה הבריטי מאחורי Reyoungel, מאז 2003. ניסיון מדעי בינלאומי, נוכחות ביותר מ-70 מדינות, אישור משרד הבריאות ותו תקן CE.",
+    "Bioha Laboratories - בית המעבדה הבריטי מאחורי Reyoungel, מאז 2003. ניסיון מדעי בינלאומי, נוכחות ביותר מ-70 מדינות, אישור משרד הבריאות ותו תקן CE.",
 };
 
 const milestones = [
@@ -24,7 +24,7 @@ const milestones = [
     label: /* @edit:milestones-1-label */ "מדינות ברחבי העולם בהן נמכרים מוצרי Reyoungel",
   },
   {
-    value: /* @edit:milestones-2-value */ "10,000,000+",
+    value: /* @edit:milestones-2-value */ "1,000,000+",
     label: /* @edit:milestones-2-label */ "קופסאות מוצר שנמכרו עד היום",
   },
 ];
@@ -43,6 +43,7 @@ export default function AboutPage() {
           }
           eyebrowEditId="src/app/about/page.tsx#hero-eyebrow"
           titleEditId="src/app/about/page.tsx#hero-title"
+          titleSizeClassName="text-[25px] font-black leading-tight sm:text-4xl lg:text-5xl"
           descriptionEditId="src/app/about/page.tsx#hero-description"
         >
           {/* @edit:hero-description */}
@@ -68,7 +69,7 @@ export default function AboutPage() {
                 חלוצים ברפואה אסתטית
               </p>
               <h2
-                className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
+                className="-mt-2 max-w-lg whitespace-nowrap font-display text-xl font-black text-ink sm:text-3xl lg:mt-0 lg:text-4xl"
                 data-edit-id="src/app/about/page.tsx#s1-headline"
               >
                 {/* @edit:s1-headline */}
@@ -119,17 +120,17 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* No section heading here — the previous h2 (data-edit-id
+            "s2-headline") never had any copy filled in, so it rendered as an
+            empty <h2>: a heading a screen-reader user would land on with
+            nothing announced (flagged in the accessibility audit run
+            alongside the new /accessibility page — axe-core doesn't tag
+            empty-heading under WCAG A/AA specifically, but it's a real,
+            easily-fixable issue, so it's included here rather than left for
+            "reasonably fixable" to exclude it on a technicality). Removed
+            rather than left blank; add a real h2 back if this section ever
+            gets its own copy. */}
         <section className="bg-ivory px-6 pb-20 lg:px-10 lg:pb-28">
-          <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-            <h2
-              className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
-              data-edit-id="src/app/about/page.tsx#s2-headline"
-            >
-              {/* @edit:s2-headline */}
-              
-            </h2>
-          </Reveal>
-
           <div className="mx-auto mt-14 max-w-3xl border-t border-hairline">
             {milestones.map((m, i) => (
               <Reveal key={m.label} delay={i * 90}>
@@ -137,7 +138,17 @@ export default function AboutPage() {
                   <span className="rail-number font-display text-2xl font-black text-stone/60 lg:text-3xl">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div className="flex flex-1 flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  {/* Stacked on mobile (value, then label, both start-aligned) rather
+                      than side-by-side with justify-between — with justify-between,
+                      the countries milestone's long label wraps to 2 lines while its
+                      neighbors' short labels don't, so that one row alone read as
+                      misaligned/disorganized against its siblings. Stacking removes
+                      the length-dependent branch entirely: every row lays out the
+                      same way regardless of label length. Reverts to the original
+                      side-by-side treatment at sm+, where there's enough width that
+                      even the long label comfortably fits on one line beside its
+                      value. */}
+                  <div className="flex flex-1 flex-col items-start gap-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-6 sm:gap-y-1">
                     <span
                       dir="ltr"
                       className="rail-label font-display text-xl font-black text-wine lg:text-2xl"
@@ -156,29 +167,6 @@ export default function AboutPage() {
               </Reveal>
             ))}
           </div>
-        </section>
-
-        {/* Soft wine tint (fix #3 from the design audit) — the site's one other
-            application besides Home's TrustAndStats, giving wine a tonal step
-            between "full solid block" and "tiny text accent" instead of only
-            ever appearing as one of those two extremes. */}
-        <section className="tinted-wine-soft px-6 pb-20 lg:px-10 lg:pb-28">
-          <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-            <h2
-              className="max-w-lg font-display text-3xl font-black text-ink lg:text-4xl"
-              data-edit-id="src/app/about/page.tsx#s3-headline"
-            >
-              {/* @edit:s3-headline */}
-              
-            </h2>
-            <p
-              className="max-w-xl text-base leading-relaxed text-stone lg:text-lg"
-              data-edit-id="src/app/about/page.tsx#s3-p1"
-            >
-              {/* @edit:s3-p1 */}
-              
-            </p>
-          </Reveal>
         </section>
 
         <CertificationShowcase />

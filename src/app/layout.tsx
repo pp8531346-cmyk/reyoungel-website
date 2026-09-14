@@ -24,11 +24,11 @@ const assistant = Assistant({
 export const metadata: Metadata = {
   metadataBase: new URL("https://reyoungel.example.com"),
   title: {
-    default: "Reyoungel — להיראות כמו עצמך, רק במיטבך",
+    default: "Reyoungel - להיראות כמו עצמך, רק במיטבך",
     template: "%s · Reyoungel",
   },
   description:
-    "Reyoungel מבית Bioha Laboratories — חומצה היאלורונית מצולבת מבוססת טכנולוגיית SAX-HA הפטנטית, לאנשי מקצוע רפואיים ולקליניקות. מאושר ע”י ה-CE האירופאי ומשרד הבריאות בישראל.",
+    "Reyoungel מבית Bioha Laboratories - חומצה היאלורונית מצולבת מבוססת טכנולוגיית SAX-HA הפטנטית, לאנשי מקצוע רפואיים ולקליניקות. מאושר ע”י ה-CE האירופאי ומשרד הבריאות בישראל.",
   icons: {
     icon: "/favicon.ico",
   },

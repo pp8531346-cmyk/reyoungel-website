@@ -44,10 +44,31 @@ export function Footer() {
         </nav>
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-cream/10 pt-6 text-xs text-cream/40">
+      {/* text-cream/40 (used here and below) measures at 3.83:1 against bg-ink —
+          fails WCAG AA's 4.5:1 text-contrast minimum (confirmed via an axe-core
+          audit, not eyeballed). /50 clears it at 5.28:1 while staying visually
+          this same "quiet fine-print" register — this was flagged by the a11y
+          audit run alongside the new legal pages, not a cosmetic change. */}
+      <div className="mx-auto mt-12 max-w-7xl border-t border-cream/10 pt-6 text-xs text-cream/50">
         {/* Year is computed, not editable — only the static tail is wired to the dev editor. */}
         © {new Date().getFullYear()} <span data-edit-id="src/components/layout/Footer.tsx#footer-copyright">{/* @edit:footer-copyright */}Reyoungel · Bioha Laboratories. כל הזכויות שמורות.</span>
       </div>
+
+      <nav
+        aria-label="קישורים משפטיים"
+        className="mx-auto mt-4 flex max-w-7xl flex-wrap gap-x-4 gap-y-2 text-xs text-cream/50"
+      >
+        {[
+          { label: "מדיניות פרטיות", href: "/privacy" },
+          { label: "תקנון ותנאי שימוש", href: "/terms" },
+          { label: "מדיניות עוגיות", href: "/cookies" },
+          { label: "הצהרת נגישות", href: "/accessibility" },
+        ].map((link) => (
+          <Link key={link.href} href={link.href} className="transition-colors hover:text-cream/80">
+            {link.label}
+          </Link>
+        ))}
+      </nav>
     </footer>
   );
 }

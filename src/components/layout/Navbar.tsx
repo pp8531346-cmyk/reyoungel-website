@@ -101,7 +101,7 @@ export function Navbar() {
             saved to sizes.json and applied above as a base scale. */}
         <Link
           href="/"
-          aria-label="Reyoungel — עמוד הבית"
+          aria-label="Reyoungel - עמוד הבית"
           onClick={() => setOpen(false)}
           data-dev-positionable="navbar-logo-mobile"
           className="flex h-9 w-24 shrink-0 items-center justify-start lg:pointer-events-none lg:h-px"
@@ -181,7 +181,7 @@ export function Navbar() {
           staying within the red area; mobile has its own compact in-flow logo above instead. */}
       <Link
         href="/"
-        aria-label="Reyoungel — עמוד הבית"
+        aria-label="Reyoungel - עמוד הבית"
         onClick={() => setOpen(false)}
         data-dev-positionable="navbar-logo"
         className="absolute right-10 top-1 z-10 hidden lg:block"

@@ -34,31 +34,40 @@ export type ShowcaseEntry = {
 export const showcaseIntro = {
   eyebrow: /* @edit:showcaseIntro-eyebrow */ "Reyoungel",
   headline: /* @edit:showcaseIntro-headline */ "סדרת המזרקים של",
-  /** Virtual canvas the 5 box images below are positioned within — matches the
-   * original hero photo's own dimensions so heroBoxes' rects (measured against
-   * that photo) still line up exactly. */
-  canvasWidth: 2746,
-  canvasHeight: 1366,
+  /** Canvas the 5 box hit-zones below are positioned within — the actual pixel
+   * dimensions of heroBoxesSprite itself (a real, square 1:1 image now, not a
+   * virtual/approximated one), so heroBoxes' rects line up exactly against it. */
+  canvasWidth: 1500,
+  canvasHeight: 1500,
 };
 
-/** The 5 product boxes from the hero photo, background-removed and cropped
- * individually (not one flat image) so each box can be its own interactive
- * element — hover lift and click-to-jump need a real element to animate, which a
- * single flat image with invisible hit-zones on top can't give us. `rect` is each
- * box's position within showcaseIntro's virtual canvas, as a percentage — measured
- * directly against the source photo, not eyeballed. */
+/** The single flat, watermark-free product photo (all 5 boxes together, supplied
+ * directly — not cropped/composited by us) used for the showcase intro row.
+ * Each product still needs its own independently hoverable/clickable element, so
+ * ShowcaseIntro renders this SAME sprite once per product inside a clipped
+ * (overflow-hidden) window sized to that product's `rect` below, offset so only
+ * that slice shows — rather than 5 separate image files. */
+export const heroBoxesSprite = {
+  src: "/images/hero-boxes-collection.png",
+  width: 1500,
+  height: 1500,
+};
+
+/** `rect` is each box's position within heroBoxesSprite, as a percentage of its
+ * 1500×1500 canvas — measured directly against the sprite (column/row alpha and
+ * color-transition scans), not eyeballed. Every on-page usage (the hero row, the
+ * product detail badge, the home product list) renders this same sprite through
+ * SpriteBoxImage, clipped to `rect` — there are no more standalone per-product box
+ * image files. */
 export const heroBoxes: {
   code: ProductCode;
-  src: string;
-  width: number;
-  height: number;
   rect: { x1: number; y1: number; x2: number; y2: number };
 }[] = [
-  { code: "R001", src: "/images/hero-box-r001.png", width: 398, height: 1147, rect: { x1: 2, y1: 1, x2: 16.5, y2: 85 } },
-  { code: "R002", src: "/images/hero-box-r002.png", width: 439, height: 1147, rect: { x1: 22, y1: 1, x2: 38, y2: 85 } },
-  { code: "R003", src: "/images/hero-box-r003.png", width: 439, height: 1161, rect: { x1: 42, y1: 1, x2: 58, y2: 86 } },
-  { code: "R004", src: "/images/hero-box-r004.png", width: 426, height: 1134, rect: { x1: 62, y1: 1, x2: 77.5, y2: 84 } },
-  { code: "R005", src: "/images/hero-box-r005.png", width: 434, height: 1141, rect: { x1: 82, y1: 1, x2: 97.8, y2: 84.5 } },
+  { code: "R001", rect: { x1: 7.6, y1: 34, x2: 21.67, y2: 72.27 } },
+  { code: "R002", rect: { x1: 26, y1: 34, x2: 39.4, y2: 72.27 } },
+  { code: "R003", rect: { x1: 44.13, y1: 34.07, x2: 57.27, y2: 72.33 } },
+  { code: "R004", rect: { x1: 62, y1: 34, x2: 75.4, y2: 72.27 } },
+  { code: "R005", rect: { x1: 79.73, y1: 34, x2: 93.73, y2: 72.27 } },
 ];
 
 /** The single fixed model photo used for all 5 products in the horizontal product
@@ -106,7 +115,7 @@ export const showcaseEntries: ShowcaseEntry[] = [
   {
     code: "R003",
     description:
-      /* @edit:showcaseEntries-R003-description */ "צמיגות בינונית–גבוהה המותאמת לנפח שפתיים ולתיקון קפל האף–שפה - משלבת תמיכה מבנית עם מרקם חלק המתאים לאזורים דינמיים בפנים.",
+      /* @edit:showcaseEntries-R003-description */ "צמיגות בינונית-גבוהה המותאמת לנפח שפתיים ולתיקון קפל האף-שפה - משלבת תמיכה מבנית עם מרקם חלק המתאים לאזורים דינמיים בפנים.",
     injectionDepth: /* @edit:showcaseEntries-R003-injectionDepth */ "דרמיס בינוני - עמוק",
     structureLabel: /* @edit:showcaseEntries-R003-structureLabel */ "++",
     haConcentration: /* @edit:showcaseEntries-R003-haConcentration */ "20 מ״ג/מ״ל",
@@ -133,13 +142,13 @@ export const showcaseEntries: ShowcaseEntry[] = [
       { id: "chin", label: /* @edit:showcaseEntries-R004-markers-chin-label */ "סנטר", x: 55.6, y: 74.9 },
       { id: "cheekbones", label: /* @edit:showcaseEntries-R004-markers-cheekbones-label */ "עצמות לחיים", x: 75.5, y: 47.5 },
       { id: "cheek-volume", label: /* @edit:showcaseEntries-R004-markers-cheek-volume-label */ "אף", x: 51.8, y: 47.6 },
-      { id: "temples", label: /* @edit:showcaseEntries-R004-markers-temples-label */ "רקות", x: 69, y: 34 },
+      { id: "temples", label: /* @edit:showcaseEntries-R004-markers-temples-label */ "רקות", x: 76.8, y: 31.9 },
     ],
   },
   {
     code: "R005",
     description:
-      /* @edit:showcaseEntries-R005-description */ "הצמיגות הגבוהה ביותר בסדרה, לדרמיס העמוק ולרקמה התת–עורית — מיועדת לעיצוב קונטור הפנים והגוף ולשחזור נפח מבני משמעותי.",
+      /* @edit:showcaseEntries-R005-description */ "הצמיגות הגבוהה ביותר בסדרה, לדרמיס העמוק ולרקמה התת-עורית - מיועדת לעיצוב קונטור הפנים והגוף ולשחזור נפח מבני משמעותי.",
     injectionDepth: /* @edit:showcaseEntries-R005-injectionDepth */ "דרמיס עמוק, תת עורי",
     structureLabel: /* @edit:showcaseEntries-R005-structureLabel */ "+++++",
     haConcentration: /* @edit:showcaseEntries-R005-haConcentration */ "20 מ״ג/מ״ל",
@@ -150,7 +159,7 @@ export const showcaseEntries: ShowcaseEntry[] = [
       { id: "chin", label: /* @edit:showcaseEntries-R005-markers-chin-label */ "סנטר", x: 54.6, y: 74.4 },
       { id: "cheekbones", label: /* @edit:showcaseEntries-R005-markers-cheekbones-label */ "עצמות לחיים", x: 75.9, y: 49.6 },
       { id: "nose", label: /* @edit:showcaseEntries-R005-markers-nose-label */ "אף", x: 52.4, y: 47.9 },
-      { id: "temples", label: /* @edit:showcaseEntries-R005-markers-temples-label */ "רקות", x: 69, y: 34 },
+      { id: "temples", label: /* @edit:showcaseEntries-R005-markers-temples-label */ "רקות", x: 77.8, y: 33.7 },
     ],
   },
 ];
