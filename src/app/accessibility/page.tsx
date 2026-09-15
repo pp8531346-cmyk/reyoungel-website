@@ -13,10 +13,14 @@ export const metadata: Metadata = {
 // was actually verified: Chrome (Playwright/Chromium + manual testing),
 // real Microsoft Edge (Playwright's msedge channel, not just Chromium),
 // real Firefox, and WebKit (Playwright's engine — the same rendering engine
-// Safari uses; no literal macOS/Safari binary was available to test).
+// Safari uses; no literal macOS/Safari binary was available to test). The
+// "כלי נגישות באתר" section below documents AccessibilityWidget — re-verified
+// (axe-core, all toggles on simultaneously, keyboard-only, mobile viewport)
+// after adding it, zero violations either way — so the feature list here
+// matches what's actually shipped, not aspirational copy.
 export default function AccessibilityPage() {
   return (
-    <LegalPage title="הצהרת נגישות" updatedDate="14.09.2026">
+    <LegalPage title="הצהרת נגישות" updatedDate="15.09.2026">
       <p>
         <strong>גובש בע&quot;מ</strong> רואה חשיבות רבה במתן שירות שוויוני ונגיש לכלל הגולשים, לרבות אנשים עם
         מוגבלות, ופועלת להנגשת אתר האינטרנט שלה בהתאם לחוק שוויון זכויות לאנשים עם מוגבלות, התשנ&quot;ח-1998,
@@ -38,6 +42,30 @@ export default function AccessibilityPage() {
           בדיקות הנגישות ותקינות התצוגה והתפקוד של האתר — לרבות דפי האתר, טפסים ורכיבים אינטראקטיביים כגון
           מחוון &quot;לפני/אחרי&quot; — בוצעו ואומתו בדפדפנים הבאים, בגרסאותיהם העדכניות: Google Chrome,
           Microsoft Edge, Mozilla Firefox, ו-Safari (מנוע רינדור WebKit).
+        </p>
+      </LegalSection>
+
+      <LegalSection title="כלי נגישות באתר">
+        <p>
+          בפינה השמאלית התחתונה של כל עמוד באתר מופיע כפתור נגישות קבוע (מסומן באייקון נגישות), המאפשר לכל
+          מבקר להתאים את תצוגת האתר לצרכיו האישיים. הכלי נבנה ונבדק כך שכל האפשרויות בו פועלות במלואן, ניתנות
+          להפעלה מלאה באמצעות מקלדת בלבד, ותומכות בקוראי מסך. לחיצה על הכפתור פותחת תפריט הכולל את ההתאמות
+          הבאות:
+        </p>
+        <ul className="flex flex-col gap-2">
+          <li>הגדלה והקטנה של גודל הטקסט (מספר רמות, כולל אפשרות חזרה לגודל המקורי).</li>
+          <li>מצב ניגודיות גבוהה.</li>
+          <li>מצב גווני אפור (ביטול צבעוניות בכל האתר, כולל תמונות).</li>
+          <li>הדגשת קישורים באמצעות קו תחתון בולט, כך שקישורים ניתנים לזיהוי גם ללא הסתמכות על צבע בלבד.</li>
+          <li>מעבר לגופן קריא ופשוט יותר.</li>
+          <li>הגדלת המרווח בין שורות ומילות הטקסט.</li>
+          <li>הפחתה וביטול של אנימציות ואפקטי תנועה באתר.</li>
+          <li>כפתור לאיפוס מיידי של כל ההגדרות בחזרה לברירת המחדל.</li>
+        </ul>
+        <p>
+          ההגדרות שנבחרות נשמרות באופן מקומי בדפדפן המבקר (localStorage) לשימוש בביקורים חוזרים, ואינן
+          משותפות או נשלחות לגורם כלשהו. הכלי נבדק גם בשילוב כל ההתאמות יחד, ובמכשירים ניידים, ללא פגיעה
+          בתפקוד או בנגישות שאר עמודי האתר.
         </p>
       </LegalSection>
 

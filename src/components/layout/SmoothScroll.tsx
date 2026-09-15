@@ -10,15 +10,17 @@ import { setLenisInstance } from "@/lib/scrollTo";
  * has its own momentum) is untouched. Same for prefers-reduced-motion: reduce,
  * where native instant scroll is kept instead.
  *
- * Mounted once in the root layout; Lenis drives the real document scroll
- * position (no wrapper element), so position:fixed/sticky elements and native
- * scroll/hashchange events all keep working as if this weren't here.
+ * Mounted once (by AccessibilityWidget, which also owns the "reduce
+ * animations" a11y toggle — see `disabled` below); Lenis drives the real
+ * document scroll position (no wrapper element), so position:fixed/sticky
+ * elements and native scroll/hashchange events all keep working as if this
+ * weren't here.
  */
-export function SmoothScroll() {
+export function SmoothScroll({ disabled = false }: { disabled?: boolean }) {
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isTouch || prefersReducedMotion) return;
+    if (isTouch || prefersReducedMotion || disabled) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -42,7 +44,7 @@ export function SmoothScroll() {
       setLenisInstance(null);
       lenis.destroy();
     };
-  }, []);
+  }, [disabled]);
 
   return null;
 }

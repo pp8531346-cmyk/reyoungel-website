@@ -312,3 +312,134 @@ body {
     transform: none !important;
   }
 }
+
+/* ==========================================================================
+   Accessibility toolbar (AccessibilityWidget) — each rule below is scoped
+   under a class toggled on <html> by that component, applied imperatively
+   via classList (never through React's className, so there's no hydration
+   mismatch risk — see the component and the pre-hydration script in
+   layout.tsx for how the class is applied before first paint).
+   ========================================================================== */
+
+/* Text size — scales html's own font-size, the same mechanism native browser
+   zoom uses. Every rem-based size on the site (type AND most Tailwind
+   spacing/radii) scales together, matching what WCAG 2.1 SC 1.4.4 "Resize
+   text" actually measures against — this needed zero per-component changes
+   since the whole site is already rem/Tailwind-driven. --navbar-h is
+   re-measured live via ResizeObserver (see Navbar.tsx), so it stays correct
+   at every scale step automatically. */
+html.a11y-scale-0 {
+  font-size: 90%;
+}
+html.a11y-scale-1 {
+  font-size: 100%;
+}
+html.a11y-scale-2 {
+  font-size: 112%;
+}
+html.a11y-scale-3 {
+  font-size: 124%;
+}
+html.a11y-scale-4 {
+  font-size: 136%;
+}
+
+/* High contrast — overrides the same brand CSS custom properties every
+   component already reads through Tailwind's `@theme inline` mapping
+   (bg-ivory, text-ink, border-hairline, etc.), so this propagates site-wide
+   without touching a single component. */
+html.a11y-contrast {
+  --color-ivory: #ffffff;
+  --color-cream: #ffffff;
+  --color-ink: #000000;
+  --color-stone: #333333;
+  --color-hairline: rgba(0, 0, 0, 0.45);
+}
+
+/* Grayscale — same custom-property trick desaturates the brand accent
+   colors (wine/plum) used for buttons/links/text everywhere. Photography
+   can't be desaturated via a custom property (it's raster pixel data, not a
+   CSS color), so real <img> elements get `filter: grayscale(1)` directly —
+   scoped to the images themselves, NOT to any ancestor. Putting `filter` on
+   an ancestor (html/body/a wrapping div) would make it the containing block
+   for every position:fixed descendant per spec, which would break the fixed
+   Navbar/ScrollProgress/this widget's own button — scoping to leaf <img>/
+   <svg>/<video> elements sidesteps that entirely since they have no
+   fixed-position descendants of their own. */
+html.a11y-grayscale {
+  --color-wine: #5c5c5c;
+  --color-wine-dark: #454545;
+  --color-plum: #4a4a4a;
+}
+html.a11y-grayscale img,
+html.a11y-grayscale svg image,
+html.a11y-grayscale video,
+html.a11y-grayscale canvas {
+  filter: grayscale(1);
+}
+
+/* Highlight links — a strong underline in the link's own (already-legible)
+   text color, per WCAG SC 1.4.1's own recommended technique for
+   distinguishing links without relying on color alone. Deliberately NOT a
+   background-color highlight: a fixed highlight color would need separate
+   contrast tuning against every background it can land on (this site's
+   ivory/cream body sections, the wine Navbar, the ink Footer, plus every
+   combination with high-contrast/grayscale mode) — testing surfaced exactly
+   that failure (footer links dropping under 4.5:1 with a yellow highlight
+   behind their already-semi-transparent cream text). An underline in
+   currentColor has no such failure mode: it's always drawn in the text's
+   own resolved color, so it can't introduce a new contrast pair. */
+html.a11y-highlight-links a {
+  text-decoration: underline !important;
+  text-decoration-color: currentColor !important;
+  text-decoration-thickness: 2.5px !important;
+  text-underline-offset: 3px !important;
+}
+
+/* Readable font — overrides the same font-family custom properties every
+   font-display/font-body utility already reads, swapping the brand serif/
+   humanist pairing for a plain, highly legible system sans-serif stack. */
+html.a11y-readable-font {
+  --font-display: Arial, "Segoe UI", Helvetica, sans-serif;
+  --font-body: Arial, "Segoe UI", Helvetica, sans-serif;
+}
+
+/* Increased text spacing — scoped to body-copy elements (not headlines,
+   which are deliberately tight-tracked display type by brand design) so it
+   reads as "more breathing room in paragraphs," not a redesign. */
+html.a11y-text-spacing {
+  letter-spacing: 0.04em;
+}
+html.a11y-text-spacing :where(p, li, dd, dt, blockquote, label, a, button) {
+  line-height: 1.9 !important;
+  word-spacing: 0.16em;
+}
+
+/* Reduce/disable animations — the same rules as the OS-level
+   prefers-reduced-motion media query above, mirrored as a class so the
+   in-page toggle works independently of the OS setting. Framer Motion's own
+   animations are handled separately via <MotionConfig reducedMotion>
+   (AccessibilityWidget), which every component's existing
+   useReducedMotion() checks already key off of — no per-component changes
+   needed there either. */
+html.a11y-reduce-motion,
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html.a11y-reduce-motion .hover-lift-btn:hover,
+html.a11y-reduce-motion .hover-lift-card:hover,
+html.a11y-reduce-motion .hover-lift-card:hover .hover-lift-image {
+  transform: none !important;
+}
+html.a11y-reduce-motion .rail-item:hover .rail-number,
+html.a11y-reduce-motion .hover-lift-card:hover .rail-number {
+  transform: none !important;
+}
+html.a11y-reduce-motion .hero-highlights-card:hover {
+  transform: none !important;
+}
